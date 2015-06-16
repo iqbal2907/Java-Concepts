@@ -1,0 +1,1 @@
+In this project I tried to cover some important concepts in java though simple examples. Each package is corresponding to some java concepts.
