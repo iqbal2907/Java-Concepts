@@ -1,3 +1,6 @@
+/**
+ * We can write a try block without catch but in this situation finally block is mandatory.
+ */
 package com.concept.exceptionhandling;
 
 public class TryWithoutCatch {
