@@ -7,6 +7,7 @@
  */
 package com.concept.oopsprinciples;
 
+//Encapsulation example
 public class Principles {
 	public static void main(String[] args) {
 		Customer customer = new Customer("Ashrafi", 123);
