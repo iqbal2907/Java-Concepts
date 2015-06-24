@@ -8,7 +8,7 @@ public class WriteAsPrimitiveDatatype_DOS {
 	
 	public static void main(String[] args) {
 		try {
-			FileOutputStream fos = new FileOutputStream("/home/iqbal/practice/workspace/MyImportantStuffs/io_resource/writeasprimitive.txt");
+			FileOutputStream fos = new FileOutputStream("/home/iqbal/practice/workspace/JavaConcepts/io_resource/writeasprimitive.txt");
 			DataOutputStream dos = new DataOutputStream(fos);
 			
 			dos.writeInt(1);

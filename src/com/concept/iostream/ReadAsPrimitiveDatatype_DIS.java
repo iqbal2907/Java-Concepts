@@ -8,7 +8,7 @@ public class ReadAsPrimitiveDatatype_DIS {
 	
 	public static void main(String[] args) {
 		try {
-			FileInputStream fos = new FileInputStream("/home/iqbal/practice/workspace/MyImportantStuffs/io_resource/writeasprimitive.txt");
+			FileInputStream fos = new FileInputStream("/home/iqbal/practice/workspace/JavaConcepts/io_resource/writeasprimitive.txt");
 			DataInputStream dos = new DataInputStream(fos);
 			
 			int i = dos.readInt();

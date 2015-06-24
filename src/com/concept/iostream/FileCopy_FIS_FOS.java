@@ -8,8 +8,8 @@ public class FileCopy_FIS_FOS {
 
 	public static void main(String[] args) {
 		try {
-			FileInputStream fis = new FileInputStream("/home/iqbal/practice/workspace/MyImportantStuffs/io_resource/readfromfile.txt");
-			FileOutputStream fos = new FileOutputStream("/home/iqbal/practice/workspace/MyImportantStuffs/io_resource/copyofreadfromfile.txt"); 
+			FileInputStream fis = new FileInputStream("/home/iqbal/practice/workspace/JavaConcepts/io_resource/readfromfile.txt");
+			FileOutputStream fos = new FileOutputStream("/home/iqbal/practice/workspace/JavaConcepts/io_resource/copyofreadfromfile.txt"); 
 			
 			int i=0;
 			while ((i=fis.read())!=-1) {

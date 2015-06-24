@@ -8,7 +8,7 @@ public class WritingDataToFile_FOS {
 	public static void main(String[] args) {
 		try {
 			byte b[] = {'x','y','z','p','q','r'};
-			FileOutputStream fos = new FileOutputStream("/home/iqbal/practice/workspace/MyImportantStuffs/io_resource/writeinthisfile.txt");
+			FileOutputStream fos = new FileOutputStream("/home/iqbal/practice/workspace/JavaConcepts/io_resource/writeinthisfile.txt");
 			fos.write('a');
 			fos.write('b');
 			fos.write('c');
@@ -19,7 +19,7 @@ public class WritingDataToFile_FOS {
 			
 			fos.write(b, 3, 3);
 			//to append data in file
-			FileOutputStream fos2 = new FileOutputStream("/home/iqbal/practice/workspace/MyImportantStuffs/io_resource/writeinthisfile.txt",true);
+			FileOutputStream fos2 = new FileOutputStream("/home/iqbal/practice/workspace/JavaConcepts/io_resource/writeinthisfile.txt",true);
 			byte b2[] = {'1','2','3'};
 			fos2.write(b2);
 			System.out.println(fos);
