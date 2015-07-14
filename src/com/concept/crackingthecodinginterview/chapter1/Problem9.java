@@ -10,7 +10,7 @@ public class Problem9 {
 	
 	public static void main(String[] args) {
 		String str1 = "waterbottle";
-		String str2 = "ewaterbottl";
+		String str2 = "lewaterbott";
 		if (isSubstring(str1, str2)) {
 			System.out.println("Its a correct rotation");
 		} else {
@@ -21,7 +21,7 @@ public class Problem9 {
 	private static boolean isSubstring(String str1, String str2) {
 		String temp = str1.concat(str1);
 		for (int i = 0; i < temp.length()-str2.length(); i++) {
-			if (temp.substring(i).equals(str2)) {
+			if (temp.substring(i,i+str2.length()).equals(str2)) {
 				return true;
 			}
 		}
