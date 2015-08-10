@@ -6,7 +6,7 @@ only one call to isSubstring (i.e., “waterbottle” is a rotation of “erbott
  */
 package com.concept.crackingthecodinginterview.chapter1;
 
-public class Problem9 {
+public class Problem8 {
 	
 	public static void main(String[] args) {
 		String str1 = "waterbottle";
