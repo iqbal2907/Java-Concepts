@@ -4,7 +4,7 @@
 
 package com.concept.synchronization.method;
 
-class Table {
+class Table3 {
 	synchronized void printTable(int n) {// synchronized method
 		for (int i = 1; i <= 5; i++) {
 			System.out.println(n * i);
@@ -20,7 +20,7 @@ class Table {
 
 public class TestSynchronization3 {
 	public static void main(String args[]) {
-		final Table obj = new Table();// only one object
+		final Table3 obj = new Table3();// only one object
 
 		Thread t1 = new Thread() {
 			public void run() {
