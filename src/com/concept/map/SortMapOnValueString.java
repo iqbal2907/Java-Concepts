@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,10 +39,16 @@ public class SortMapOnValueString {
 
 		System.out.println("Map before sorting on value :  "+map);
 
-		ArrayList<Entry<Integer, String>> list = new ArrayList<Map.Entry<Integer, String>>();
+/*		ArrayList<Entry<Integer, String>> list = new ArrayList<Map.Entry<Integer, String>>();
 		for (Map.Entry<Integer, String> entry : map.entrySet()) {
 			list.add(entry);
-		}
+		}*/
+		
+		//another way of conversion
+		List<Map.Entry<Integer, String>> list = new LinkedList<Map.Entry<Integer, String>>(
+				map.entrySet());
+		
+		
 		System.out.println("List before sorting on value : "+list);
 		Collections.sort(list, new Comparator<Map.Entry<Integer, String>>() {
 

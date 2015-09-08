@@ -1,4 +1,4 @@
-package com.concept.collection.list;
+package com.concept.linkedlist.singly;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

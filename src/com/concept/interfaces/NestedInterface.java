@@ -8,7 +8,7 @@
  * 1. Nested interface must be public if it is declared inside the interface but it can have any access modifier if declared within the class.
  * 2. Nested interfaces are declared static implicitely.
  */
-package com.concept.innerclass;
+package com.concept.interfaces;
 
 //Example of nested interface which is declared within the interface
 interface Showable {
