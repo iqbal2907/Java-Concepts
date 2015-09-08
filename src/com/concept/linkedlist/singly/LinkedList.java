@@ -7,12 +7,14 @@ public class LinkedList<T> implements Iterable<T> {
 	private Node last;
 	private int N;
 
+	//constructor
 	public LinkedList() {
 		first = null;
 		last = null;
 		N = 0;
 	}
 
+	// add method to add items into the list
 	public void add(T item) {
 		if (item == null) {
 			throw new NullPointerException(
@@ -29,6 +31,7 @@ public class LinkedList<T> implements Iterable<T> {
 		N++;
 	}
 
+	// remove method to remove items from the list
 	public boolean remove(T item) {
 		if (isEmpty()) {
 			throw new IllegalStateException(
@@ -67,14 +70,17 @@ public class LinkedList<T> implements Iterable<T> {
 		return result;
 	}
 
+	// returns size of the list
 	public int size() {
 		return N;
 	}
 
+	// tells whether list is empty or not
 	public boolean isEmpty() {
 		return N == 0;
 	}
 
+	// inner class Node to create list node
 	private class Node {
 		private T data;
 		private Node next;
@@ -85,11 +91,13 @@ public class LinkedList<T> implements Iterable<T> {
 		}
 	}
 
+	// To print a list using iterator
 	@Override
 	public Iterator<T> iterator() {
 		return new LinkedListIterator();
 	}
 
+	//inner class for iterating a list
 	private class LinkedListIterator implements Iterator<T> {
 		private Node current = first;
 
@@ -114,10 +122,11 @@ public class LinkedList<T> implements Iterable<T> {
 		}
 	}
 
+	// to convert list into string
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-		for (T item : this)
+		for (T item : this) // here we are using this coz our class LinkedList implments Iterable interface
 			s.append(item + " ");
 		return s.toString();
 	}
@@ -140,5 +149,18 @@ public class LinkedList<T> implements Iterable<T> {
 			}
 			break;
 		}*/
+		
+		list.add("1");
+		list.add("2");
+		list.add("3");
+		list.add("4");
+		
+		System.out.println(list.toString());
+		Iterator<String> iterator = list.iterator();
+		while (iterator.hasNext()) {
+			String string = (String) iterator.next();
+			System.out.println(string);
+		}
+
 	}
 }
