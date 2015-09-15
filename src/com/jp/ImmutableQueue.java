@@ -43,7 +43,7 @@ public class ImmutableQueue<E> implements Cloneable {
 		@SuppressWarnings("unchecked")
 		ImmutableQueue<E> q = (ImmutableQueue<E>) this.clone();
 		Node<E> n = new Node<E>(q.tail, e, null);
-		q.tail = n;
+		q.tail.next = n;
 		return q;
 	}
 	/**
@@ -143,19 +143,21 @@ public class ImmutableQueue<E> implements Cloneable {
 }
 class TestImmutableQueue {
 	public static void main(String[] args) {
-		ImmutableQueue<String> queue = new ImmutableQueue<String>();
-		queue.add("A");
-		queue.add("B");
-		queue.add("C");
-		queue.add("D");
+		ImmutableQueue<Character> queue = new ImmutableQueue<Character>();
+		queue.add('p');
+		queue.add('q');
+		queue.add('r');
+		queue.add('s');
+		queue.add('t');
 		queue.print();
 		try {
-			System.out.println(queue.size());
+			System.out.println("\n"+queue.size());
+			queue.enqueue('x').print();
+			System.out.println("\n"+queue.size());
 			queue.dequeue().print();
-			System.out.println(queue.size());
+			System.out.println("\n"+queue.size());
 			queue.print();
 		} catch (IllegalArgumentException | CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
