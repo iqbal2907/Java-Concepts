@@ -9,17 +9,13 @@ import java.util.NoSuchElementException;
  */
 public class ImmutableQueue<E> implements Cloneable {
 
-	int size = 0;
+	private int size = 0;
 	private Node<E> head;
 	private Node<E> tail;
 
 	public ImmutableQueue() {
 		// modify this constructor if necessary, but do not remove default
 		// constructor
-	}
-	public ImmutableQueue(ImmutableQueue<E> immutableQueue) {
-		this.head = immutableQueue.head;
-		this.tail = immutableQueue.tail;
 	}
 	// add other constructors if necessary
 	/**
@@ -64,8 +60,10 @@ public class ImmutableQueue<E> implements Cloneable {
 			head = tail = node;
 		} else {
 			Node<E> node = new Node<E>(tail, e, null);
+			tail.next = node;
 			tail = node;
 		}
+		size++;
 	}
 	/**
 	 * Returns the queue that removes the object at the head of this queue
@@ -81,11 +79,18 @@ public class ImmutableQueue<E> implements Cloneable {
 	 * If this queue is empty, throws java.util.NoSuchElementException.
 	 * 
 	 * @return
+	 * @throws CloneNotSupportedException 
 	 * @throws java.util.NoSuchElementException
 	 */
-	public ImmutableQueue<E> dequeue() {
-		return null;
-	}
+	public ImmutableQueue<E> dequeue() throws CloneNotSupportedException {
+		Node<E> f = head;
+		if (f == null)
+			throw new NoSuchElementException();
+		@SuppressWarnings("unchecked")
+		ImmutableQueue<E> q = (ImmutableQueue<E>) this.clone();
+		q.head = q.head.next;
+		return q;
+		}
 	/**
 	 * Looks at the object which is the head of this queue without removing it
 	 * from the queue.
@@ -102,7 +107,7 @@ public class ImmutableQueue<E> implements Cloneable {
 	 * @throws java.util.NoSuchElementException
 	 */
 	public E peek() throws NoSuchElementException {
-		final Node<E> f = head;
+		Node<E> f = head;
 		if (f == null)
 			throw new NoSuchElementException();
 		return f.item;
@@ -120,7 +125,7 @@ public class ImmutableQueue<E> implements Cloneable {
 
 		Node<E> head = this.head;
 		while (head!=null) {
-			System.out.println(head.item);
+			System.out.print(head.item+" ");
 			head = head.next;
 		}
 	}
@@ -143,7 +148,15 @@ class TestImmutableQueue {
 		queue.add("B");
 		queue.add("C");
 		queue.add("D");
-		
 		queue.print();
+		try {
+			System.out.println(queue.size());
+			queue.dequeue().print();
+			System.out.println(queue.size());
+			queue.print();
+		} catch (IllegalArgumentException | CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
