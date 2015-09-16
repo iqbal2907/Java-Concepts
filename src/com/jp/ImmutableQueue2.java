@@ -1,5 +1,11 @@
 package com.jp;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 /**
  * The Queue class represents an immutable first-in-first-out (FIFO) queue of
@@ -7,15 +13,20 @@ import java.util.NoSuchElementException;
  * 
  * @param <E>
  */
-public class ImmutableQueue<E> implements Cloneable {
+@SuppressWarnings("serial")
+public class ImmutableQueue2<E> implements Cloneable,Serializable {
 
 	private int size = 0;
 	private Node<E> head;
 	private Node<E> tail;
 
-	public ImmutableQueue() {
+	public ImmutableQueue2() {
 		// modify this constructor if necessary, but do not remove default
 		// constructor
+	}
+	public ImmutableQueue2(ImmutableQueue2<E> ImmutableQueue2) {
+		ImmutableQueue2.head = this.head;
+		ImmutableQueue2.tail = this.tail;
 	}
 	// add other constructors if necessary
 	/**
@@ -36,13 +47,13 @@ public class ImmutableQueue<E> implements Cloneable {
 	 * @throws IllegalArgumentException
 	 * @throws CloneNotSupportedException
 	 */
-	public ImmutableQueue<E> enqueue(E e) throws IllegalArgumentException,
+	public ImmutableQueue2<E> enqueue(E e) throws IllegalArgumentException,
 			CloneNotSupportedException {
 		if (e == null) {
 			throw new IllegalArgumentException();
 		}
 		@SuppressWarnings("unchecked")
-		ImmutableQueue<E> q = (ImmutableQueue<E>) this.clone();
+		ImmutableQueue2<E> q = (ImmutableQueue2<E>) this.clone();
 		Node<E> n = new Node<E>(e, tail);
 		q.tail = n;
 		return q;
@@ -79,22 +90,43 @@ public class ImmutableQueue<E> implements Cloneable {
 	 * If this queue is empty, throws java.util.NoSuchElementException.
 	 * 
 	 * @return
-	 * @throws CloneNotSupportedException
 	 * @throws java.util.NoSuchElementException
 	 */
-	public ImmutableQueue<E> dequeue() throws CloneNotSupportedException {
+	public ImmutableQueue2<E> dequeue() {
 		Node<E> f = head;
 		if (f == null)
 			throw new NoSuchElementException();
-		@SuppressWarnings("unchecked")
-		ImmutableQueue<E> q = (ImmutableQueue<E>) this.clone();
+		ImmutableQueue2<E> q = getClone(this);
 		Node<E> tail = q.tail;
-		while (tail.next != head) {
+		while (tail.next.next != null) {
 			tail = tail.next;
 		}
 		head = tail;
 		tail.next = null;
 		return q;
+	}
+
+	@SuppressWarnings("unchecked")
+	private ImmutableQueue2<E> getClone(ImmutableQueue2<E> q) {
+		
+		ObjectOutputStream oos = null;
+		ObjectInputStream ois = null;
+		ImmutableQueue2<E> queue = null;
+		
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			oos = new ObjectOutputStream(bos);
+			oos.writeObject(q);
+			oos.flush();
+			ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+			ois = new ObjectInputStream(bis);
+			queue = (ImmutableQueue2<E>) ois.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return queue;
 	}
 	/**
 	 * Looks at the object which is the head of this queue without removing it
@@ -134,7 +166,7 @@ public class ImmutableQueue<E> implements Cloneable {
 			tail = tail.next;
 		}
 	}
-	private static class Node<E> {
+	private static class Node<E> implements Serializable {
 		E item;
 		Node<E> next;
 
@@ -144,12 +176,12 @@ public class ImmutableQueue<E> implements Cloneable {
 		}
 	}
 }
-class TestImmutableQueue {
+class TestImmutableQueue2 {
 	public static void main(String[] args) throws IllegalArgumentException,
 			CloneNotSupportedException {
-		ImmutableQueue<Character> q = new ImmutableQueue<Character>();
+		ImmutableQueue2<Character> q = new ImmutableQueue2<Character>();
 
-		ImmutableQueue<Character> queue = new ImmutableQueue<Character>();
+		ImmutableQueue2<Character> queue = new ImmutableQueue2<Character>();
 		queue.add('p');
 		queue.add('q');
 		queue.add('r');
@@ -158,7 +190,8 @@ class TestImmutableQueue {
 		System.out.println("\nOriginal queue :");
 		queue.print();
 		System.out.println("\nSize of original queue :" + queue.size());
-		System.out.println("--------------------------------------------------------------");
+		System.out
+				.println("--------------------------------------------------------------");
 
 		System.out.println("\nQueue after enquing element :");
 		q = queue.enqueue('x');
@@ -167,7 +200,8 @@ class TestImmutableQueue {
 		System.out.println("\nOriginal queue :");
 		queue.print();
 		System.out.println("\nSize of original queue :" + queue.size());
-		System.out.println("\n--------------------------------------------------------------");
+		System.out
+				.println("\n--------------------------------------------------------------");
 
 		System.out.println("\nQueue after dequing element :");
 		q = queue.dequeue();
