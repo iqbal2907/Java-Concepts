@@ -17,6 +17,10 @@ public class ImmutableQueue<E> implements Cloneable {
 		// modify this constructor if necessary, but do not remove default
 		// constructor
 	}
+	public ImmutableQueue(ImmutableQueue<E> immutableQueue) {
+		immutableQueue.head = this.head;
+		immutableQueue.tail = this.tail;
+	}
 	// add other constructors if necessary
 	/**
 	 * Returns the queue that adds an item into the tail of this queue without
@@ -34,16 +38,17 @@ public class ImmutableQueue<E> implements Cloneable {
 	 * @param e
 	 * @return
 	 * @throws IllegalArgumentException
-	 * @throws CloneNotSupportedException 
+	 * @throws CloneNotSupportedException
 	 */
-	public ImmutableQueue<E> enqueue(E e) throws IllegalArgumentException, CloneNotSupportedException {
+	public ImmutableQueue<E> enqueue(E e) throws IllegalArgumentException,
+			CloneNotSupportedException {
 		if (e == null) {
 			throw new IllegalArgumentException();
 		}
 		@SuppressWarnings("unchecked")
 		ImmutableQueue<E> q = (ImmutableQueue<E>) this.clone();
-		Node<E> n = new Node<E>(q.tail, e, null);
-		q.tail.next = n;
+		Node<E> n = new Node<E>(e, tail);
+		q.tail = n;
 		return q;
 	}
 	/**
@@ -56,11 +61,10 @@ public class ImmutableQueue<E> implements Cloneable {
 			throw new IllegalArgumentException();
 		}
 		if (head == null && tail == null) {
-			Node<E> node = new Node<E>(tail, e, head);
+			Node<E> node = new Node<E>(e, head);
 			head = tail = node;
 		} else {
-			Node<E> node = new Node<E>(tail, e, null);
-			tail.next = node;
+			Node<E> node = new Node<E>(e, tail);
 			tail = node;
 		}
 		size++;
@@ -79,7 +83,7 @@ public class ImmutableQueue<E> implements Cloneable {
 	 * If this queue is empty, throws java.util.NoSuchElementException.
 	 * 
 	 * @return
-	 * @throws CloneNotSupportedException 
+	 * @throws CloneNotSupportedException
 	 * @throws java.util.NoSuchElementException
 	 */
 	public ImmutableQueue<E> dequeue() throws CloneNotSupportedException {
@@ -88,9 +92,14 @@ public class ImmutableQueue<E> implements Cloneable {
 			throw new NoSuchElementException();
 		@SuppressWarnings("unchecked")
 		ImmutableQueue<E> q = (ImmutableQueue<E>) this.clone();
-		q.head = q.head.next;
-		return q;
+		Node<E> tail = q.tail;
+		while (tail.next != head) {
+			tail = tail.next;
 		}
+		head = tail;
+		tail.next = null;
+		return q;
+	}
 	/**
 	 * Looks at the object which is the head of this queue without removing it
 	 * from the queue.
@@ -123,42 +132,54 @@ public class ImmutableQueue<E> implements Cloneable {
 
 	public void print() {
 
-		Node<E> head = this.head;
-		while (head!=null) {
-			System.out.print(head.item+" ");
-			head = head.next;
+		Node<E> tail = this.tail;
+		while (tail != null) {
+			System.out.print(tail.item + " ");
+			tail = tail.next;
 		}
 	}
 	private static class Node<E> {
 		E item;
 		Node<E> next;
-		Node<E> prev;
 
-		Node(Node<E> prev, E element, Node<E> next) {
+		Node(E element, Node<E> next) {
 			this.item = element;
 			this.next = next;
-			this.prev = prev;
 		}
 	}
 }
 class TestImmutableQueue {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IllegalArgumentException,
+			CloneNotSupportedException {
+		ImmutableQueue<Character> q = new ImmutableQueue<Character>();
+
 		ImmutableQueue<Character> queue = new ImmutableQueue<Character>();
 		queue.add('p');
 		queue.add('q');
 		queue.add('r');
 		queue.add('s');
 		queue.add('t');
+		System.out.println("\nOriginal queue :");
 		queue.print();
-		try {
-			System.out.println("\n"+queue.size());
-			queue.enqueue('x').print();
-			System.out.println("\n"+queue.size());
-			queue.dequeue().print();
-			System.out.println("\n"+queue.size());
-			queue.print();
-		} catch (IllegalArgumentException | CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		System.out.println("\nSize of original queue :" + queue.size());
+		System.out.println("--------------------------------------------------------------");
+
+		System.out.println("\nQueue after enquing element :");
+		q = queue.enqueue('x');
+		q.print();
+		System.out.println("\nSize of new queue :" + queue.size());
+		System.out.println("\nOriginal queue :");
+		queue.print();
+		System.out.println("\nSize of original queue :" + queue.size());
+		System.out.println("\n--------------------------------------------------------------");
+
+		System.out.println("\nQueue after dequing element :");
+		q = queue.dequeue();
+		q.print();
+		System.out.println("\nSize of new queue :" + queue.size());
+		System.out.println("\nOriginal queue :");
+		queue.print();
+		System.out.println("\nSize of original queue :" + queue.size());
+
 	}
 }
