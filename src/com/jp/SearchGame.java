@@ -1,12 +1,14 @@
 package com.jp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Stack;
 
 public class SearchGame {
 
@@ -14,7 +16,7 @@ public class SearchGame {
 
 	Map<Integer, List<CheckNode>> adjMap = new HashMap<Integer, List<CheckNode>>();
 	CheckNode rootNode = null;
-	
+
 	public SearchGame() {
 	}
 	public SearchGame(CheckNode rootNode, Map<Integer, List<CheckNode>> adjMap) {
@@ -27,18 +29,33 @@ public class SearchGame {
 	 * tries to go far from the root node. Stack is used in the implementation
 	 * of the depth first search.
 	 */
-	public void dfs() {/*
-						 * // DFS uses Stack data structure //write game logic
-						 * here Stack<CheckNode> s = new Stack<CheckNode>();
-						 * s.push(this.rootNode);
-						 * System.out.println("ROOT : "+rootNode.getVal());
-						 * this.rootNode.visited = true; while (!s.isEmpty()) {
-						 * CheckNode n = s.peek(); CheckNode child =
-						 * getUnvisitedChildNode(n); if (child != null) {
-						 * child.visited = true;
-						 * System.out.print(child.getVal()+" "); s.push(child);
-						 * } else { s.pop(); } }
-						 */
+	public void dfs() {
+		// DFS uses Stack data structure //write game logic here
+		Stack<CheckNode> s = new Stack<CheckNode>();
+		s.push(this.rootNode);
+		System.out.println("ROOT : " + rootNode.getVal());
+		this.rootNode.visited = true;
+		while (!s.isEmpty()) {
+			CheckNode n = s.peek();
+			CheckNode child = getUnvisitedChildNode(n);
+			if (child != null) {
+				if (child.getVal() == '@') {
+					checkpointsCount--;
+				}
+				child.visited = true;
+				System.out.print(child + "->");
+				s.push(child);
+			} else {
+				s.pop();
+			}
+		}
+	}
+	/**
+	 * The aim of DFS algorithm is to traverse the graph in such a way that it
+	 * tries to go far from the root node. Stack is used in the implementation
+	 * of the depth first search.
+	 */
+	public void bfs() {
 		// BFS uses Queue data structure
 		Queue<CheckNode> q = new LinkedList<CheckNode>();
 		q.add(this.rootNode);
@@ -48,8 +65,10 @@ public class SearchGame {
 			CheckNode n = q.remove();
 			CheckNode child = null;
 			while ((child = getUnvisitedChildNode(n)) != null) {
-				child.visited = true;
-				System.out.print(child+"->");
+				if (child.getVal() == '@') {
+					checkpointsCount--;
+				}
+				System.out.print(child + "->");
 				q.add(child);
 			}
 		}
@@ -59,9 +78,15 @@ public class SearchGame {
 
 		ArrayList<CheckNode> list = (ArrayList<CheckNode>) adjMap.get(n
 				.getHashValue());
+		Collections.sort(list);
 		Iterator<CheckNode> itr = list.listIterator();
 		while (itr.hasNext()) {
 			CheckNode node = itr.next();
+
+			if (checkpointsCount >= 1 && node.getVal() == 'G') {
+				continue;
+			}
+
 			if (!node.visited) {
 				node.visited = true;
 				return node;
@@ -72,8 +97,8 @@ public class SearchGame {
 	public static void main(String[] args) {
 		int width = Integer.parseInt(args[0]);
 		int hight = Integer.parseInt(args[1]);
-		
-		if (width>100 || hight>100) {
+
+		if (width > 100 || hight > 100) {
 			System.out.println("Given arguments do not satisfy specifications");
 			System.exit(-1);
 		}
@@ -92,8 +117,8 @@ public class SearchGame {
 				}
 			}
 		}
-		
-		if (checkpointsCount>18) {
+
+		if (checkpointsCount > 18) {
 			System.out.println("Given arguments do not satisfy specifications");
 			System.exit(-1);
 		}
@@ -158,12 +183,13 @@ public class SearchGame {
 		System.out.println("total no of checkpoints : " + checkpointsCount);
 		System.out.println("ROOT in main : " + rootNode);
 		System.out.println(adjMap);
+//		new SearchGame(rootNode, adjMap).bfs();
 		new SearchGame(rootNode, adjMap).dfs();
 
 	}
 }
 
-class CheckNode {
+class CheckNode implements Comparable<CheckNode> {
 	private int x;
 	private int y;
 	private char val;
@@ -206,6 +232,10 @@ class CheckNode {
 		result = prime * result + x;
 		result = prime * result + y;
 		return result;
+	}
+	@Override
+	public int compareTo(CheckNode o) {
+		return o.getVal() - this.getVal();
 	}
 
 }
