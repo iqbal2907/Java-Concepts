@@ -11,10 +11,11 @@ public class Astar {
 	private static int checkpointsCount;
 	private static Square start;
 	private static Square goal;
+	private static char[][] arr;
 
 	List<Square> openList = new LinkedList<Square>();
-
 	List<Square> closeList = new LinkedList<Square>();
+	List<Square> pathList = new LinkedList<Square>();
 
 	private static List<Square> checkpoints = new ArrayList<Square>();
 
@@ -23,28 +24,87 @@ public class Astar {
 		Square destination = null;
 		while (!checkpoints.isEmpty()) {
 			destination = new Astar().getNearestCheckPoint(source);
-			System.out.println(source + "->" + destination);
-			// aStarSearch(source, destination);
+			aStarSearch(source, destination);
 			source = destination;
 		}
 		// finally pass goal node
-		System.out.println(source + "->" + goal);
-		// aStarSearch(source, goal);
+		aStarSearch(source, goal);
 	}
 	public void aStarSearch(Square start, Square destination) {
-		Square current = null;
-		openList.add(start);
-		while (openList.isEmpty() || current.val != 'G') {
-			Collections.sort(openList);
-			current = openList.get(0);
-			closeList.add(current);
-			if (!openList.contains(new Square(current.val,
-					current.pt.getX() + 1, current.pt.getY() + 1))) {
-
+		Square current = start;
+		System.out.println("start : "+start);
+		Square left = null;
+		Square right = null;
+		Square up = null;
+		Square down = null;
+		int x = start.getPt().getX();
+		int y = start.getPt().getY();
+int i = 0;
+		do {
+			// Apply A* here
+			i++;
+			if (checkWithinLimit(x - 1, y)) {
+				left = new Square(arr[x - 1][y], x - 1, y);
+				left.setParent(current.getPt());
+				left.setH((int)getDistanceBetweenSquares(current, destination)*10);
+				left.setG(current.getG()+10);
+				left.setF(left.getG()+left.getH());
+				if (!openList.contains(left)) {
+					openList.add(left);
+				}
 			}
-		}
+			if (checkWithinLimit(x + 1, y)) {
+				right = new Square(arr[x + 1][y], x + 1, y);
+				right.setParent(current.getPt());
+				right.setH((int)getDistanceBetweenSquares(current, destination)*10);
+				right.setG(current.getG()+10);
+				right.setF(right.getG()+right.getH());
+				if (!openList.contains(right)) {
+					openList.add(right);
+				}
+			}
+			if (checkWithinLimit(x, y - 1)) {
+				down = new Square(arr[x][y - 1], x, y - 1);
+				down.setParent(current.getPt());
+				down.setH((int)getDistanceBetweenSquares(current, destination)*10);
+				down.setG(current.getG()+10);
+				down.setF(down.getG()+down.getH());
+				if (!openList.contains(down)) {
+					openList.add(down);
+				}
+			}
+			if (checkWithinLimit(x, y + 1)) {
+				up = new Square(arr[x][y + 1], x, y + 1);
+				if (!openList.contains(up)) {
+					up.setParent(current.getPt());
+					up.setH((int)getDistanceBetweenSquares(current, destination)*10);
+					up.setG(current.getG()+10);
+					up.setF(up.getG()+up.getH());
+					openList.add(up);
+				} else {
+					/// *********************************************************
+				}
+			}
+
+			Collections.sort(openList);
+//			System.out.println(openList);
+			current = openList.remove(0);
+			System.out.println(current);
+		} while (!openList.isEmpty() && current.getVal()!= 'G' && i<5);
 	}
 
+	private boolean checkWithinLimit(int i, int j) {
+		try {
+			@SuppressWarnings("unused")
+			char ch = arr[i][j];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return false;
+		}
+		if (arr[i][j] == '#') {
+			return false;
+		}
+		return true;
+	}
 	public Square getNearestCheckPoint(Square start) {
 		Square nearest = null;
 		Square square = null;
@@ -54,7 +114,7 @@ public class Astar {
 		while (iterator.hasNext()) {
 			square = (Square) iterator.next();
 			dis = getDistanceBetweenSquares(start, square);
-			System.out.println("Node : " + square + " Dis : " + Math.ceil(dis));
+//			System.out.println("Node : " + square + " Dis : " + Math.ceil(dis));
 			if (dis <= d) {
 				d = dis;
 				nearest = square;
@@ -65,11 +125,8 @@ public class Astar {
 	}
 
 	private double getDistanceBetweenSquares(Square start, Square square) {
-		return Math
-				.sqrt(((start.pt.getX() - square.pt.getX()) * (start.pt.getX() - square.pt
-						.getX()))
-						+ ((start.pt.getY() - square.pt.getY()) * (start.pt
-								.getY() - square.pt.getY())));
+		return Math.sqrt(((start.getPt().getX() - square.getPt().getX()) * (start.getPt().getX() - square.getPt().getX()))
+				+ ((start.getPt().getY() - square.getPt().getY()) * (start.getPt().getY() - square.getPt().getY())));
 	}
 	public static void main(String[] args) {
 
@@ -80,10 +137,9 @@ public class Astar {
 			System.out.println("Given arguments do not satisfy specifications");
 			System.exit(-1);
 		}
-		System.out.println("\nwidth(j) : " + width + "\nhight(i) : "
-				+ (hight - 2));
+		System.out.println("\nwidth(j) : " + width + "\nhight(i) : " + (hight - 2));
 		System.out.println();
-		char[][] arr = new char[hight][width];
+		arr = new char[hight][width];
 		String row;
 
 		for (int i = 2; i < hight; i++) {
@@ -94,8 +150,7 @@ public class Astar {
 					checkpointsCount++;
 				}
 				if (checkpointsCount > 18) {
-					System.out
-							.println("Given arguments do not satisfy specifications");
+					System.out.println("Given arguments do not satisfy specifications");
 					System.exit(-1);
 				}
 
@@ -108,12 +163,12 @@ public class Astar {
 				System.out.print(arr[i][j] + " ");
 				if (arr[i][j] == 'S') {
 					start = new Square(arr[i][j], i, j);
+					start.setParent(new Point(i, j));
 				}
 				if (arr[i][j] == 'G') {
 					goal = new Square(arr[i][j], i, j);
 				}
 				if (arr[i][j] == '@') {
-					checkpointsCount++;
 					Square checkPoint = new Square(arr[i][j], i, j);
 					checkpoints.add(checkPoint);
 				}
@@ -121,25 +176,21 @@ public class Astar {
 			System.out.println();
 		}
 
-		new Astar().search();
+/*		System.out.println(checkpointsCount);
+		System.out.println(checkpoints);
+*/		new Astar().search();
 	}
 }
 
 class Square implements Comparable<Square> {
-	public Point pt;
-	public Point parent;
-	public char val;
+	private Point pt;
+	private Point parent;
+	private char val;
 	private int f, g, h; // for implementing f = g + H
 
 	public Square(char val, int x, int y) {
 		this.pt = new Point(x, y);
 		this.val = val;
-	}
-
-	public Square(int g) {
-		this.g = g;
-		h = 10;
-		f = g + h;
 	}
 
 	@Override
@@ -158,9 +209,31 @@ class Square implements Comparable<Square> {
 		Square sq = (Square) obj;
 		return this.pt.equals(sq.pt);
 	}
+	
+	
+	
 	@Override
 	public String toString() {
-		return "Square [pt=" + pt + ", val=" + val + "]";
+		return "Square [pt=" + pt + ", parent=" + parent + ", val=" + val + ", f=" + f + ", g=" + g + ", h=" + h + "]";
+	}
+
+	public Point getPt() {
+		return pt;
+	}
+	public void setPt(Point pt) {
+		this.pt = pt;
+	}
+	public char getVal() {
+		return val;
+	}
+	public void setVal(char val) {
+		this.val = val;
+	}
+	public Point getParent() {
+		return parent;
+	}
+	public void setParent(Point parent) {
+		this.parent = parent;
 	}
 	public int getF() {
 		return f;
