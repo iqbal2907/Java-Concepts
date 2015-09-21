@@ -53,12 +53,8 @@ public class Astar {
 		Iterator<Square> iterator = checkpoints.iterator();
 		while (iterator.hasNext()) {
 			square = (Square) iterator.next();
-			dis = Math
-					.sqrt(((start.pt.getX() - square.pt.getX()) * (start.pt
-							.getX() - square.pt.getX()))
-							+ ((start.pt.getY() - square.pt.getY()) * (start.pt
-									.getY() - square.pt.getY())));
-//			System.out.println("Node : " + square + " Dis : " + dis);
+			dis = getDistanceBetweenSquares(start, square);
+			System.out.println("Node : " + square + " Dis : " + Math.ceil(dis)); // Math.ceil(dis) use this value as H
 			if (dis <= d) {
 				d = dis;
 				nearest = square;
@@ -68,6 +64,13 @@ public class Astar {
 		return nearest;
 	}
 
+	private double getDistanceBetweenSquares(Square start, Square square) {
+		return Math
+				.sqrt(((start.pt.getX() - square.pt.getX()) * (start.pt
+						.getX() - square.pt.getX()))
+						+ ((start.pt.getY() - square.pt.getY()) * (start.pt
+								.getY() - square.pt.getY())));
+	}
 	public static void main(String[] args) {
 
 		int width = Integer.parseInt(args[0]);
@@ -101,7 +104,7 @@ public class Astar {
 		// printing input data
 		for (int i = 0; i < hight; i++) {
 			for (int j = 0; j < width; j++) {
-				System.out.print(arr[i][j]);
+				System.out.print(arr[i][j]+" ");
 				if (arr[i][j] == 'S') {
 					start = new Square(arr[i][j], i, j);
 				}
