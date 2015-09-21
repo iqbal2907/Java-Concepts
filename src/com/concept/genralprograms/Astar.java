@@ -23,13 +23,13 @@ public class Astar {
 		Square destination = null;
 		while (!checkpoints.isEmpty()) {
 			destination = new Astar().getNearestCheckPoint(source);
-			System.out.println(source +"->"+destination);
-//			aStarSearch(source, destination);
+			System.out.println(source + "->" + destination);
+			// aStarSearch(source, destination);
 			source = destination;
 		}
-		//finally pass goal node
-		System.out.println(source +"->"+goal);
-//		aStarSearch(source, goal);
+		// finally pass goal node
+		System.out.println(source + "->" + goal);
+		// aStarSearch(source, goal);
 	}
 	public void aStarSearch(Square start, Square destination) {
 		Square current = null;
@@ -54,7 +54,7 @@ public class Astar {
 		while (iterator.hasNext()) {
 			square = (Square) iterator.next();
 			dis = getDistanceBetweenSquares(start, square);
-			System.out.println("Node : " + square + " Dis : " + Math.ceil(dis)); // Math.ceil(dis) use this value as H
+			System.out.println("Node : " + square + " Dis : " + Math.ceil(dis));
 			if (dis <= d) {
 				d = dis;
 				nearest = square;
@@ -66,8 +66,8 @@ public class Astar {
 
 	private double getDistanceBetweenSquares(Square start, Square square) {
 		return Math
-				.sqrt(((start.pt.getX() - square.pt.getX()) * (start.pt
-						.getX() - square.pt.getX()))
+				.sqrt(((start.pt.getX() - square.pt.getX()) * (start.pt.getX() - square.pt
+						.getX()))
 						+ ((start.pt.getY() - square.pt.getY()) * (start.pt
 								.getY() - square.pt.getY())));
 	}
@@ -94,7 +94,8 @@ public class Astar {
 					checkpointsCount++;
 				}
 				if (checkpointsCount > 18) {
-					System.out.println("Given arguments do not satisfy specifications");
+					System.out
+							.println("Given arguments do not satisfy specifications");
 					System.exit(-1);
 				}
 
@@ -104,7 +105,7 @@ public class Astar {
 		// printing input data
 		for (int i = 0; i < hight; i++) {
 			for (int j = 0; j < width; j++) {
-				System.out.print(arr[i][j]+" ");
+				System.out.print(arr[i][j] + " ");
 				if (arr[i][j] == 'S') {
 					start = new Square(arr[i][j], i, j);
 				}
@@ -128,20 +129,26 @@ class Square implements Comparable<Square> {
 	public Point pt;
 	public Point parent;
 	public char val;
-	public int F, G, H; // for implementing F = G + H
+	private int f, g, h; // for implementing f = g + H
 
 	public Square(char val, int x, int y) {
 		this.pt = new Point(x, y);
 		this.val = val;
 	}
+
+	public Square(int g) {
+		this.g = g;
+		h = 10;
+		f = g + h;
+	}
+
 	@Override
 	public int compareTo(Square o) {
-		return this.F - o.F;
+		return this.f - o.f;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-
 		if (obj == this) {
 			return true;
 		}
@@ -155,7 +162,24 @@ class Square implements Comparable<Square> {
 	public String toString() {
 		return "Square [pt=" + pt + ", val=" + val + "]";
 	}
-
+	public int getF() {
+		return f;
+	}
+	public void setF(int f) {
+		this.f = f;
+	}
+	public int getG() {
+		return g;
+	}
+	public void setG(int g) {
+		this.g = g;
+	}
+	public int getH() {
+		return h;
+	}
+	public void setH(int h) {
+		this.h = h;
+	}
 }
 
 class Point {
