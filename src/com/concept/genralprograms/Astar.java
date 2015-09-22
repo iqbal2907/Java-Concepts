@@ -34,22 +34,24 @@ public class Astar {
 	public void aStarSearch(Square start, Square destination) {
 		Square current = start;
 		System.out.println("\nstart : " + start);
+		System.out.println("destination : " + destination);
 
 		Square left = null;
 		Square right = null;
 		Square up = null;
 		Square down = null;
-		int x = start.getPt().getX();
-		int y = start.getPt().getY();
+		int x = -1;
+		int y = -1;
 
-		int i = 0;
+		closeList.clear();
 		openList.clear();
+		pathList.clear();
+		pathList.add(start);
 		do {
 			// Apply A* here
 			closeList.add(current);
 			x = current.getPt().getX();
 			y = current.getPt().getY();
-			i++;
 			if (checkWithinLimit(x - 1, y)) {
 				left = new Square(arr[x - 1][y], x - 1, y);
 				left.setParent(current.getPt());
@@ -58,7 +60,7 @@ public class Astar {
 				left.setF(left.getG() + left.getH());
 				if (!openList.contains(left) && !closeList.contains(left)) {
 					openList.add(left);
-					System.out.println("left"+left);
+					//System.out.println("left"+left);
 				}
 			}
 			if (checkWithinLimit(x + 1, y)) {
@@ -69,7 +71,7 @@ public class Astar {
 				right.setF(right.getG() + right.getH());
 				if (!openList.contains(right) && !closeList.contains(right)) {
 					openList.add(right);
-					System.out.println("right"+right);
+					//System.out.println("right"+right);
 				}
 			}
 			if (checkWithinLimit(x, y - 1)) {
@@ -80,7 +82,7 @@ public class Astar {
 				down.setF(down.getG() + down.getH());
 				if (!openList.contains(down) && !closeList.contains(down)) {
 					openList.add(down);
-					System.out.println("down"+down);
+					//System.out.println("down"+down);
 				}
 			}
 			if (checkWithinLimit(x, y + 1)) {
@@ -91,15 +93,18 @@ public class Astar {
 				up.setF(up.getG() + up.getH());
 				if (!openList.contains(up) && !closeList.contains(up)) {
 					openList.add(up);
-					System.out.println("up"+up);
+					//System.out.println("up"+up);
 				}
 			}
 
 			Collections.sort(openList);
 			current = openList.remove(0);
-			System.out.println("current : "+current);
-			System.out.println("openList : "+openList);
-		} while (!current.equals(destination) && i < 5);
+			pathList.add(current);
+//			System.out.println("current : "+current);
+//			System.out.println("current hashcode: "+current.hashCode());
+//			System.out.println("openList : "+openList);
+		} while (!current.equals(destination));
+		System.out.println("pathList : "+pathList);
 		System.out.println("end : "+current);
 		System.out.println("####################################################");
 	}
@@ -212,6 +217,18 @@ class Square implements Comparable<Square> {
 	}
 
 	@Override
+	public int hashCode() {
+		int x = pt.getX();
+		int y = pt.getY();
+		
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -222,7 +239,7 @@ class Square implements Comparable<Square> {
 		Square sq = (Square) obj;
 		return this.pt.equals(sq.pt);
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Square [pt=" + pt + ", parent=" + parent + ", val=" + val + ", f=" + f + ", g=" + g + ", h=" + h + "]";
