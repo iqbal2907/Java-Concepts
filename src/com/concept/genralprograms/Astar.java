@@ -24,6 +24,7 @@ public class Astar {
 		Square destination = null;
 		while (!checkpoints.isEmpty()) {
 			destination = new Astar().getNearestCheckPoint(source);
+			checkpoints.remove(destination);
 			aStarSearch(source, destination);
 			source = destination;
 		}
@@ -32,65 +33,69 @@ public class Astar {
 	}
 	public void aStarSearch(Square start, Square destination) {
 		Square current = start;
-		System.out.println("start : "+start);
+		System.out.println("\nstart : " + start);
+
 		Square left = null;
 		Square right = null;
 		Square up = null;
 		Square down = null;
 		int x = start.getPt().getX();
 		int y = start.getPt().getY();
-int i = 0;
+
+		int i = 0;
+		openList.clear();
 		do {
 			// Apply A* here
+			closeList.add(current);
 			i++;
 			if (checkWithinLimit(x - 1, y)) {
 				left = new Square(arr[x - 1][y], x - 1, y);
 				left.setParent(current.getPt());
-				left.setH((int)getDistanceBetweenSquares(current, destination)*10);
-				left.setG(current.getG()+10);
-				left.setF(left.getG()+left.getH());
-				if (!openList.contains(left)) {
+				left.setH((int) getDistanceBetweenSquares(current, destination) * 10);
+				left.setG(current.getG() + 10);
+				left.setF(left.getG() + left.getH());
+				if (!openList.contains(left) && !closeList.contains(left)) {
 					openList.add(left);
 				}
 			}
 			if (checkWithinLimit(x + 1, y)) {
 				right = new Square(arr[x + 1][y], x + 1, y);
 				right.setParent(current.getPt());
-				right.setH((int)getDistanceBetweenSquares(current, destination)*10);
-				right.setG(current.getG()+10);
-				right.setF(right.getG()+right.getH());
-				if (!openList.contains(right)) {
+				right.setH((int) getDistanceBetweenSquares(current, destination) * 10);
+				right.setG(current.getG() + 10);
+				right.setF(right.getG() + right.getH());
+				if (!openList.contains(right) && !closeList.contains(right)) {
 					openList.add(right);
 				}
 			}
 			if (checkWithinLimit(x, y - 1)) {
 				down = new Square(arr[x][y - 1], x, y - 1);
 				down.setParent(current.getPt());
-				down.setH((int)getDistanceBetweenSquares(current, destination)*10);
-				down.setG(current.getG()+10);
-				down.setF(down.getG()+down.getH());
-				if (!openList.contains(down)) {
+				down.setH((int) getDistanceBetweenSquares(current, destination) * 10);
+				down.setG(current.getG() + 10);
+				down.setF(down.getG() + down.getH());
+				if (!openList.contains(down) && !closeList.contains(down)) {
 					openList.add(down);
 				}
 			}
 			if (checkWithinLimit(x, y + 1)) {
 				up = new Square(arr[x][y + 1], x, y + 1);
-				if (!openList.contains(up)) {
-					up.setParent(current.getPt());
-					up.setH((int)getDistanceBetweenSquares(current, destination)*10);
-					up.setG(current.getG()+10);
-					up.setF(up.getG()+up.getH());
+				up.setParent(current.getPt());
+				up.setH((int) getDistanceBetweenSquares(current, destination) * 10);
+				up.setG(current.getG() + 10);
+				up.setF(up.getG() + up.getH());
+				if (!openList.contains(up) && !closeList.contains(up)) {
 					openList.add(up);
-				} else {
-					/// *********************************************************
 				}
 			}
 
 			Collections.sort(openList);
-//			System.out.println(openList);
-			current = openList.remove(0);
-			System.out.println(current);
-		} while (!openList.isEmpty() && current.getVal()!= 'G' && i<5);
+			current = openList.get(0);
+			System.out.println("current : "+current);
+			System.out.println("openList : "+openList);
+		} while (!openList.isEmpty() && !current.equals(destination) && i < 5);
+		System.out.println("end : "+current);
+
 	}
 
 	private boolean checkWithinLimit(int i, int j) {
@@ -114,18 +119,19 @@ int i = 0;
 		while (iterator.hasNext()) {
 			square = (Square) iterator.next();
 			dis = getDistanceBetweenSquares(start, square);
-//			System.out.println("Node : " + square + " Dis : " + Math.ceil(dis));
+			// System.out.println("Node : " + square + " Dis : " +
+			// Math.ceil(dis));
 			if (dis <= d) {
 				d = dis;
 				nearest = square;
 			}
 		}
-		checkpoints.remove(nearest);
 		return nearest;
 	}
 
 	private double getDistanceBetweenSquares(Square start, Square square) {
-		return Math.sqrt(((start.getPt().getX() - square.getPt().getX()) * (start.getPt().getX() - square.getPt().getX()))
+		return Math.sqrt(((start.getPt().getX() - square.getPt().getX()) * (start.getPt().getX() - square.getPt()
+				.getX()))
 				+ ((start.getPt().getY() - square.getPt().getY()) * (start.getPt().getY() - square.getPt().getY())));
 	}
 	public static void main(String[] args) {
@@ -176,9 +182,10 @@ int i = 0;
 			System.out.println();
 		}
 
-/*		System.out.println(checkpointsCount);
-		System.out.println(checkpoints);
-*/		new Astar().search();
+		/*
+		 * System.out.println(checkpointsCount);
+		 * System.out.println(checkpoints);
+		 */new Astar().search();
 	}
 }
 
@@ -209,9 +216,7 @@ class Square implements Comparable<Square> {
 		Square sq = (Square) obj;
 		return this.pt.equals(sq.pt);
 	}
-	
-	
-	
+
 	@Override
 	public String toString() {
 		return "Square [pt=" + pt + ", parent=" + parent + ", val=" + val + ", f=" + f + ", g=" + g + ", h=" + h + "]";
