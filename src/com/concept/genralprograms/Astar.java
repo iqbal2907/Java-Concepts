@@ -47,6 +47,8 @@ public class Astar {
 		do {
 			// Apply A* here
 			closeList.add(current);
+			x = current.getPt().getX();
+			y = current.getPt().getY();
 			i++;
 			if (checkWithinLimit(x - 1, y)) {
 				left = new Square(arr[x - 1][y], x - 1, y);
@@ -56,6 +58,7 @@ public class Astar {
 				left.setF(left.getG() + left.getH());
 				if (!openList.contains(left) && !closeList.contains(left)) {
 					openList.add(left);
+					System.out.println("left"+left);
 				}
 			}
 			if (checkWithinLimit(x + 1, y)) {
@@ -66,6 +69,7 @@ public class Astar {
 				right.setF(right.getG() + right.getH());
 				if (!openList.contains(right) && !closeList.contains(right)) {
 					openList.add(right);
+					System.out.println("right"+right);
 				}
 			}
 			if (checkWithinLimit(x, y - 1)) {
@@ -76,6 +80,7 @@ public class Astar {
 				down.setF(down.getG() + down.getH());
 				if (!openList.contains(down) && !closeList.contains(down)) {
 					openList.add(down);
+					System.out.println("down"+down);
 				}
 			}
 			if (checkWithinLimit(x, y + 1)) {
@@ -86,16 +91,17 @@ public class Astar {
 				up.setF(up.getG() + up.getH());
 				if (!openList.contains(up) && !closeList.contains(up)) {
 					openList.add(up);
+					System.out.println("up"+up);
 				}
 			}
 
 			Collections.sort(openList);
-			current = openList.get(0);
+			current = openList.remove(0);
 			System.out.println("current : "+current);
 			System.out.println("openList : "+openList);
-		} while (!openList.isEmpty() && !current.equals(destination) && i < 5);
+		} while (!current.equals(destination) && i < 5);
 		System.out.println("end : "+current);
-
+		System.out.println("####################################################");
 	}
 
 	private boolean checkWithinLimit(int i, int j) {
