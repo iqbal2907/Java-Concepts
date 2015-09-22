@@ -15,7 +15,7 @@ public class Astar {
 
 	List<Square> openList = new LinkedList<Square>();
 	List<Square> closeList = new LinkedList<Square>();
-	List<Square> pathList = new LinkedList<Square>();
+	List<Point> finalPathList = new LinkedList<Point>();
 
 	private static List<Square> checkpoints = new ArrayList<Square>();
 
@@ -30,6 +30,12 @@ public class Astar {
 		}
 		// finally pass goal node
 		aStarSearch(source, goal);
+		if (!finalPathList.contains(goal.getParent())) {
+			finalPathList.add(goal.getParent());
+		}
+
+		System.out.println("finalPathList : "+finalPathList);
+
 	}
 	public void aStarSearch(Square start, Square destination) {
 		Square current = start;
@@ -42,11 +48,13 @@ public class Astar {
 		Square down = null;
 		int x = -1;
 		int y = -1;
+		List<Point> pathList = new LinkedList<Point>();
 
 		closeList.clear();
 		openList.clear();
-		pathList.clear();
-		pathList.add(start);
+		if (!pathList.contains(start.getParent())) {
+			pathList.add(start.getParent());
+		}
 		do {
 			// Apply A* here
 			closeList.add(current);
@@ -60,7 +68,6 @@ public class Astar {
 				left.setF(left.getG() + left.getH());
 				if (!openList.contains(left) && !closeList.contains(left)) {
 					openList.add(left);
-					//System.out.println("left"+left);
 				}
 			}
 			if (checkWithinLimit(x + 1, y)) {
@@ -71,7 +78,6 @@ public class Astar {
 				right.setF(right.getG() + right.getH());
 				if (!openList.contains(right) && !closeList.contains(right)) {
 					openList.add(right);
-					//System.out.println("right"+right);
 				}
 			}
 			if (checkWithinLimit(x, y - 1)) {
@@ -82,7 +88,6 @@ public class Astar {
 				down.setF(down.getG() + down.getH());
 				if (!openList.contains(down) && !closeList.contains(down)) {
 					openList.add(down);
-					//System.out.println("down"+down);
 				}
 			}
 			if (checkWithinLimit(x, y + 1)) {
@@ -93,21 +98,19 @@ public class Astar {
 				up.setF(up.getG() + up.getH());
 				if (!openList.contains(up) && !closeList.contains(up)) {
 					openList.add(up);
-					//System.out.println("up"+up);
 				}
 			}
-
 			Collections.sort(openList);
 			current = openList.remove(0);
-			pathList.add(current);
-//			System.out.println("current : "+current);
-//			System.out.println("current hashcode: "+current.hashCode());
-//			System.out.println("openList : "+openList);
+			if (!pathList.contains(current.getParent())) {
+				pathList.add(current.getParent());
+			}
 		} while (!current.equals(destination));
-		System.out.println("pathList : "+pathList);
+		finalPathList.addAll(pathList);
+/*		System.out.println("pathList : "+pathList);
 		System.out.println("end : "+current);
 		System.out.println("####################################################");
-	}
+*/	}
 
 	private boolean checkWithinLimit(int i, int j) {
 		try {
@@ -130,8 +133,6 @@ public class Astar {
 		while (iterator.hasNext()) {
 			square = (Square) iterator.next();
 			dis = getDistanceBetweenSquares(start, square);
-			// System.out.println("Node : " + square + " Dis : " +
-			// Math.ceil(dis));
 			if (dis <= d) {
 				d = dis;
 				nearest = square;
@@ -177,26 +178,25 @@ public class Astar {
 		// printing input data
 		for (int i = 0; i < hight; i++) {
 			for (int j = 0; j < width; j++) {
-				System.out.print(arr[i][j] + " ");
+				System.out.print(arr[i][j] + "("+i+","+j+") ");
 				if (arr[i][j] == 'S') {
 					start = new Square(arr[i][j], i, j);
 					start.setParent(new Point(i, j));
 				}
 				if (arr[i][j] == 'G') {
 					goal = new Square(arr[i][j], i, j);
+					goal.setParent(new Point(i, j));
 				}
 				if (arr[i][j] == '@') {
 					Square checkPoint = new Square(arr[i][j], i, j);
+					checkPoint.setParent(new Point(i, j));
 					checkpoints.add(checkPoint);
 				}
 			}
 			System.out.println();
 		}
 
-		/*
-		 * System.out.println(checkpointsCount);
-		 * System.out.println(checkpoints);
-		 */new Astar().search();
+		new Astar().search();
 	}
 }
 
@@ -242,7 +242,7 @@ class Square implements Comparable<Square> {
 	
 	@Override
 	public String toString() {
-		return "Square [pt=" + pt + ", parent=" + parent + ", val=" + val + ", f=" + f + ", g=" + g + ", h=" + h + "]";
+		return "Square [pt=" + pt + ", parent=" + parent +"]";
 	}
 
 	public Point getPt() {
@@ -305,13 +305,26 @@ class Point {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
 		Point pt = (Point) obj;
 		return this.x == pt.x && this.y == pt.y;
 	}
-
 	@Override
 	public String toString() {
 		return "(" + x + "," + y + ")";
 	}
-
+	@Override
+	public int hashCode() {
+		final int prime = 997;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}
+	
 }
