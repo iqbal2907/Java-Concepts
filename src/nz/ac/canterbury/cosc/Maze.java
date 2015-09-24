@@ -66,18 +66,19 @@ public class Maze {
 		}
 		mazeArray = array;
 //		printMaze();
-		Cell start = mazeArray[0][mazeMaxRow - 1];
-		Cell end = mazeArray[mazeMaxColumn - 1][0];
-		System.out.println("start : " + start);
+		Cell start = mazeArray[mazeMaxRow - 1][0];
+		Cell end = mazeArray[0][mazeMaxColumn - 1];
+/*		System.out.println("start : " + start);
 		System.out.println("end : " + end);
-		new Maze().search(start, end);
+*/		new Maze().search(start, end);
 	}
 
 	private static void printMaze() {
 		for (int i = 0; i < mazeMaxColumn; i++) {
 			for (int j = 0; j < mazeMaxRow; j++) {
-				System.out.println(mazeArray[i][j]);
+				System.out.print(mazeArray[i][j]+" ");
 			}
+			System.out.println();
 		}
 	}
 	private void search(Cell start, Cell end) {
@@ -92,43 +93,42 @@ public class Maze {
 
 	private Cell getValidNeighbourCellToMove(Cell cell, Cell end) {
 		ArrayList<Cell> list = new ArrayList<Cell>();
-		if (canMoveUp(cell.i - 1, cell.j)) {
+		if (cell.up && canMoveUp(cell.i - 1, cell.j)) {
 			Cell up = mazeArray[cell.i - 1][cell.j];
+			up.g = 10 + cell.g;
+			up.h = getHuristicDistance(up, end);
+			up.f = up.g + up.h;
 			if (!closeList.contains(up)) {
-				up.g = 10 + cell.g;
-				up.h = getHuristicDistance(up, end);
-				up.f = up.g + up.h;
 				list.add(up);
 			}
 		}
-		if (canMoveLeft(cell.i, cell.j - 1)) {
+		if (cell.left && canMoveLeft(cell.i, cell.j - 1)) {
 			Cell left = mazeArray[cell.i][cell.j - 1];
+			left.g = 10 + cell.g;
+			left.h = getHuristicDistance(left, end);
+			left.f = left.g + left.h;
 			if (!closeList.contains(left)) {
-				left.g = 10 + cell.g;
-				left.h = getHuristicDistance(left, end);
-				left.f = left.g + left.h;
 				list.add(left);
 			}
 		}
-		if (canMoveRight(cell.i, cell.j + 1)) {
+		if (cell.right && canMoveRight(cell.i, cell.j + 1)) {
 			Cell right = mazeArray[cell.i][cell.j + 1];
+			right.g = 10 + cell.g;
+			right.h = getHuristicDistance(right, end);
+			right.f = right.g + right.h;
 			if (!closeList.contains(right)) {
-				right.g = 10 + cell.g;
-				right.h = getHuristicDistance(right, end);
-				right.f = right.g + right.h;
 				list.add(right);
 			}
 		}
-		if (canMoveDown(cell.i + 1, cell.j)) {
+		if (cell.down && canMoveDown(cell.i + 1, cell.j)) {
 			Cell down = mazeArray[cell.i + 1][cell.j];
+			down.g = 10 + cell.g;
+			down.h = getHuristicDistance(down, end);
+			down.f = down.g + down.h;
 			if (!closeList.contains(down)) {
-				down.g = 10 + cell.g;
-				down.h = getHuristicDistance(down, end);
-				down.f = down.g + down.h;
 				list.add(down);
 			}
 		}
-//		System.out.println("list : "+list);
 		Collections.sort(list);
 		return list.get(0);
 	}
@@ -141,46 +141,98 @@ public class Maze {
 	private boolean canMoveUp(int i, int j) {
 		try {
 			Cell cell = mazeArray[i][j];
-			if (cell.up == true) {
-				return true;
+			int wayCount = 0;
+			if (cell.down) {
+				wayCount++;
+			}
+			if (cell.left) {
+				wayCount++;
+			}
+			if (cell.right) {
+				wayCount++;
+			}
+			if (cell.up) {
+				wayCount++;
+			}
+			if (wayCount<2) {
+				return false;
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 	private boolean canMoveLeft(int i, int j) {
 		try {
 			Cell cell = mazeArray[i][j];
-			if (cell.left == true) {
-				return true;
+			int wayCount = 0;
+			if (cell.down) {
+				wayCount++;
+			}
+			if (cell.left) {
+				wayCount++;
+			}
+			if (cell.right) {
+				wayCount++;
+			}
+			if (cell.up) {
+				wayCount++;
+			}
+			if (wayCount<2) {
+				return false;
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 	private boolean canMoveRight(int i, int j) {
 		try {
 			Cell cell = mazeArray[i][j];
-			if (cell.right == true) {
-				return true;
+			int wayCount = 0;
+			if (cell.down) {
+				wayCount++;
+			}
+			if (cell.left) {
+				wayCount++;
+			}
+			if (cell.right) {
+				wayCount++;
+			}
+			if (cell.up) {
+				wayCount++;
+			}
+			if (wayCount<2) {
+				return false;
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 	private boolean canMoveDown(int i, int j) {
 		try {
 			Cell cell = mazeArray[i][j];
-			if (cell.down == true) {
-				return true;
+			int wayCount = 0;
+			if (cell.down) {
+				wayCount++;
+			}
+			if (cell.left) {
+				wayCount++;
+			}
+			if (cell.right) {
+				wayCount++;
+			}
+			if (cell.up) {
+				wayCount++;
+			}
+			if (wayCount<2) {
+				return false;
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 }
 
@@ -200,6 +252,22 @@ class Cell implements Comparable<Cell> {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (down ? 1231 : 1237);
+		result = prime * result + f;
+		result = prime * result + g;
+		result = prime * result + h;
+		result = prime * result + i;
+		result = prime * result + j;
+		result = prime * result + (left ? 1231 : 1237);
+		result = prime * result + (right ? 1231 : 1237);
+		result = prime * result + (up ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -208,25 +276,40 @@ class Cell implements Comparable<Cell> {
 		if (getClass() != obj.getClass())
 			return false;
 		Cell other = (Cell) obj;
+		if (down != other.down)
+			return false;
+		if (f != other.f)
+			return false;
+		if (g != other.g)
+			return false;
+		if (h != other.h)
+			return false;
 		if (i != other.i)
 			return false;
 		if (j != other.j)
+			return false;
+		if (left != other.left)
+			return false;
+		if (right != other.right)
+			return false;
+		if (up != other.up)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Cell [i=" + i + ", j=" + j + ", f=" + f + ", g=" + g + ", h="
+/*		return "Cell [i=" + i + ", j=" + j + ", f=" + f + ", g=" + g + ", h="
 				+ h + ", up=" + up + ", left=" + left + ", right=" + right
 				+ ", down=" + down + "]";
-	
-//		return "(" + i + "," + j + ")";
-	
+*/
+		return "(" + i + "," + j + ")";
+
 	}
 
 	@Override
 	public int compareTo(Cell o) {
 		return this.j - o.j;
 	}
+
 }
