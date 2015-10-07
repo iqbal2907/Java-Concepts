@@ -1,15 +1,7 @@
 package com.jp.year2015.DijkstraAlgo;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-public class TestDijkstraAlgorithm {
+public class TestDijkstraAlgorithm {/*
 
 	private List<Vertex> nodes;
 	private List<Edge> edges;
@@ -56,4 +48,4 @@ public class TestDijkstraAlgorithm {
 		Edge lane = new Edge(laneId, nodes.get(sourceLocNo), nodes.get(destLocNo), duration);
 		edges.add(lane);
 	}
-}
+*/}

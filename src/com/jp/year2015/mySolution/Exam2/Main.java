@@ -17,17 +17,12 @@ public class Main {
 	
 
 	public static void main(String[] args) {
+		long time = System.currentTimeMillis();
 		int totalCities = Integer.parseInt(args[0]);
-		int totalQueries = Integer.parseInt(args[1]);
-//		System.out.println("totalCities : " + totalCities);
-//		System.out.println("totalQueries : " + totalQueries);
 
-		System.out.println("cities : ");
 		int i = 0;
 		for (i = 2; i < totalCities*2; i+=2) {
 
-			System.out.println(args[i]+" "+args[i+1]);
-			
 			if (adjMap.get(Integer.parseInt(args[i])) == null) {
 				LinkedHashSet<City> cityList = new LinkedHashSet<City>();
 				cityList.add(new City(Integer.parseInt(args[i+1])));
@@ -52,22 +47,17 @@ public class Main {
 		}
 		makeCityFestive(1);
 
-		System.out.println("queries : ");
-		
 		for (; i < args.length; i+=2) {
-			System.out.println(args[i]+" "+args[i+1]);
 			if (Integer.parseInt(args[i]) == 1) {
-				System.out.println("Change city "+(args[i+1])+" to festive");
 				makeCityFestive(Integer.parseInt(args[i+1]));
 			} else if (Integer.parseInt(args[i]) == 2) {
-//				System.out.println("find nearest festive city from city "+(args[i+1]));
 				int minDistance = getNearestFestiveCityDistance(Integer.parseInt(args[i+1]));
-				System.out.println("minDistance : " + minDistance);
+				System.out.println(minDistance);
 				resetMap(Integer.parseInt(args[i+1]));
 			}
 		}
-		
-		System.out.println(adjMap);
+
+		System.out.println("Execution time : "+(System.currentTimeMillis()-time));
 	}
 
 	private static void makeCityFestive(int i) {

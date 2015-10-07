@@ -17,6 +17,7 @@ public class TestTIC {
 	
 
 	public static void main(String[] args) {
+		long time = System.currentTimeMillis();
 		int totalCities = Integer.parseInt(args[0]);
 		int totalQueries = Integer.parseInt(args[1]);
 //		System.out.println("totalCities : " + totalCities);
@@ -68,6 +69,8 @@ public class TestTIC {
 		}
 		
 		System.out.println(adjMap);
+		System.out.println("End time : "+(System.currentTimeMillis()-time));
+
 	}
 
 	private static void makeCityFestive(int i) {
