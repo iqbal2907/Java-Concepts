@@ -1,4 +1,4 @@
-package com.jp.year2015.mySolution.TravelInformationCenter;
+package com.jp.year2015.mySolution.Exam2;
 
 import java.util.ArrayList;
 import java.util.HashMap;

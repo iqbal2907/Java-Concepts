@@ -1,4 +1,4 @@
-package com.jp.year2015.mySolution.TravelInformationCenter;
+package com.jp.year2015.mySolution.Exam2;
 
 public class City {
 	final private int id;
