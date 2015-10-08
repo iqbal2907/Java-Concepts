@@ -9,6 +9,9 @@ import java.util.Map;
 
 public class Main {
 
+	private static Map<Integer, List<Cell>> adjMap = new HashMap<Integer, List<Cell>>();
+	private static Map<Integer, Cell> objMap = new HashMap<Integer, Cell>();
+
 	public static void main(String[] args) {
 		long time = System.currentTimeMillis();
 
@@ -40,8 +43,19 @@ public class Main {
 		}
 
 		// creating object map
-		Map<Integer, Cell> objMap = new HashMap<Integer, Cell>();
+		createObjectMap(rows, columns, arr);
+//		System.out.println("Object Map : \n" + objMap);
 
+		createAdjacencyMap(rows, columns, arr);
+		// preparing adjacency list here
+
+		System.out.println("Execution time : "
+				+ (System.currentTimeMillis() - time));
+		System.out.println("\n\nAdjacency Map : \n" + adjMap);
+
+	}
+
+	private static void createObjectMap(int rows, int columns, int[][] arr) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				if (arr[i][j] != -1) {
@@ -51,11 +65,9 @@ public class Main {
 				}
 			}
 		}
-		// System.out.println("Object Map : \n" + objMap);
+	}
 
-		Map<Integer, List<Cell>> adjMap = new HashMap<Integer, List<Cell>>();
-
-		// preparing adjacency list here
+	private static void createAdjacencyMap(int rows, int columns, int[][] arr) {
 		for (int i = 1; i < rows - 1; i++) {
 			for (int j = 0; j < columns - 1; j++) {
 				if (arr[i][j] != -1) {
@@ -183,10 +195,6 @@ public class Main {
 			}
 			adjMap.put(node.hashCode(), list);
 		}
-		System.out.println("\n\nAdjacency Map : \n" + adjMap);
-		System.out.println("Execution time : "
-				+ (System.currentTimeMillis() - time));
-
 	}
 }
 
