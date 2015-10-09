@@ -2,8 +2,10 @@ package com.jp.year2015.mySolution.Exam1;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 // TODO Remove package name before submission
 
@@ -12,6 +14,7 @@ public class Main {
 	private static Map<Integer, List<Cell>> adjMap = new HashMap<Integer, List<Cell>>();
 	private static Map<Integer, Cell> objMap = new HashMap<Integer, Cell>();
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		long time = System.currentTimeMillis();
 
@@ -49,12 +52,104 @@ public class Main {
 		createAdjacencyMap(rows, columns, arr);
 		// preparing adjacency list here
 
+//		System.out.println("\n\nAdjacency Map : \n" + adjMap);
+		Cell start = null;
+		int maxValue = 0 ;
+/*		for (int i = 0; i < rows; i++) {
+			if (arr[i][0] != -1) {
+				Cell cell = new Cell(i, 0, arr[i][0]);
+				if (getMaxFrom(cell) > maxValue) {
+					maxValue = getMaxFrom(cell);
+					start = cell;
+				}
+			}
+		}
+*/		
+		Cell cell = new Cell(3, 0, arr[3][0]);
+		System.out.println("Calculating max from : "+cell);
+		maxValue = getMaxFrom(cell);
+		System.out.println("Final max value : "+maxValue);
 		System.out.println("Execution time : "
 				+ (System.currentTimeMillis() - time));
-		System.out.println("\n\nAdjacency Map : \n" + adjMap);
-
 	}
 
+	private static int getMaxFrom(Cell cell){
+		int max = 0;
+		int noOfChilds = 0;
+
+		Stack<Cell> st = new Stack<Cell>();
+		st.push(cell);
+		cell.visited = true;
+		Cell child = null;
+		while ((child = getUnvisitedChildNode(cell)) != null) {
+			noOfChilds++;
+			st.add(child);
+//			child.visited = true;
+		}
+		if (noOfChilds != 0) {
+			Cell c = null;
+			while (!st.isEmpty() && (st.size()>1)) {
+				c = st.pop();
+				int m = getMaxFrom(c);
+				c.visited = false;
+				max = max > m ? max : m;
+			}
+			c = st.pop();
+			max += c.getVal();
+		} else {
+			max = cell.getVal();
+		}
+		System.out.println(cell +":"+ max);
+//		resetMap(cell);
+		return max;
+	}
+	
+	private static Cell getUnvisitedChildNode(Cell cell) {
+		List<Cell> list = adjMap.get(cell.hashCode());
+		if (list != null) {
+			Iterator<Cell> itr = list.iterator();
+			while (itr.hasNext()) {
+				Cell c = itr.next();
+				if (!c.visited) {
+					c.visited = true;
+					return c;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static void resetMap(Cell cell) {
+		Stack<Cell> s = new Stack<Cell>();
+		s.push(cell);
+		cell.visited = false;
+		while (!s.isEmpty()) {
+			Cell n = s.peek();
+			Cell child = getVisitedChildNode(n);
+			if (child != null) {
+				cell.visited = true;
+				s.push(child);
+			} else {
+				s.pop();
+			}
+		}
+	
+	}
+	
+	private static Cell getVisitedChildNode(Cell n) {
+		List<Cell> list = adjMap.get(n.hashCode());
+		if (list != null) {
+			Iterator<Cell> itr = list.iterator();
+			while (itr.hasNext()) {
+				Cell node = itr.next();
+				if (node.visited) {
+					node.visited = false;
+					return node;
+				}
+			}
+		}
+		return null;
+	}
 	private static void createObjectMap(int rows, int columns, int[][] arr) {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
