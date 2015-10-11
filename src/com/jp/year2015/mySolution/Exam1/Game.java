@@ -2,8 +2,11 @@ package com.jp.year2015.mySolution.Exam1;
 
 public class Game {
 
+	private static Entry[][] arr = null;
+	private static int row;
+	private static int column;
 	public static void main(String[] args) {
-		
+
 		int rows = Integer.parseInt(args[0]);
 		int columns = Integer.parseInt(args[1]);
 
@@ -13,16 +16,20 @@ public class Game {
 		}
 		System.out.println("R:" + rows + ", C:" + columns);
 
-		Entry[][] arr = new Entry[rows][columns];
+		row = rows - 1;
+		column = columns - 1;
+		arr = new Entry[rows][columns];
 
 		for (int i = 2, j = 0, k = 0; i < args.length; i++) {
 			if ((i - 2) % columns == 0 && (i - 2) != 0) {
 				j++;
 			}
 			k = (i - 2) % columns;
-			arr[j][k] = new Entry(j, k, Integer.parseInt(args[i]));
+			if (Integer.parseInt(args[i]) != -1) {
+				arr[j][k] = new Entry(j, k, Integer.parseInt(args[i]));
+			}
 		}
-		
+
 		System.out.println("Input in matrix : ");
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
@@ -30,15 +37,36 @@ public class Game {
 			}
 			System.out.println();
 		}
-		
+
 		Entry start = arr[0][3];
-		int maxValue = getMaxFrom(start);
-		System.out.println("Maximum value from "+start+" is : "+maxValue);
+		int maxValue = 0;
+		maxValue = getMaxFrom(start);
+		System.out.println("Maximum value from " + start + " is : " + maxValue);
 	}
 
 	private static int getMaxFrom(Entry start) {
-		
-		return 0;
+		int mUp = 0, mFront = 0, mDown = 0;
+		// get max from up
+		Entry up = arr[start.getI() - 1][start.getJ()];
+		if (up != null) {
+			mUp = getMaxFrom(up);
+		}
+		// get max from front
+		if (start.getJ() < column) {
+			Entry front = arr[start.getI() - 1][start.getJ()];
+			if (front != null) {
+				mFront = getMaxFrom(front);
+			}
+		}
+		// get max from down
+		Entry down = arr[start.getI() + 1][start.getJ()];
+		if (down != null) {
+			mDown = getMaxFrom(down);
+		}
+		mUp = mUp > mFront ? mUp : mFront;
+		mUp = mUp > mDown ? mUp : mDown;
+
+		return mUp;
 	}
 }
 
@@ -89,4 +117,3 @@ class Entry implements Comparable<Entry> {
 	}
 
 }
-
