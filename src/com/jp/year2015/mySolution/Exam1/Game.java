@@ -1,10 +1,13 @@
 package com.jp.year2015.mySolution.Exam1;
 
+import java.util.Stack;
+
 public class Game {
 
 	private static Entry[][] arr = null;
 	private static int row;
 	private static int column;
+	private static int maximum;
 	public static void main(String[] args) {
 
 		int rows = Integer.parseInt(args[0]);
@@ -33,40 +36,60 @@ public class Game {
 		System.out.println("Input in matrix : ");
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				System.out.print(arr[i][j] + " ");
+				if (arr[i][j] != null) {
+					System.out.print(arr[i][j].getVal() + " ");
+				} else {
+					System.out.print(-1 + " ");
+				}
 			}
 			System.out.println();
 		}
 
-		Entry start = arr[0][3];
+		Entry start = arr[3][0];
 		int maxValue = 0;
 		maxValue = getMaxFrom(start);
 		System.out.println("Maximum value from " + start + " is : " + maxValue);
 	}
 
 	private static int getMaxFrom(Entry start) {
-		int mUp = 0, mFront = 0, mDown = 0;
+		int max = 0, preMax = 0, curMax = 0;
+		Stack<Entry> stack = new Stack<Entry>();
 		// get max from up
-		Entry up = arr[start.getI() - 1][start.getJ()];
-		if (up != null) {
-			mUp = getMaxFrom(up);
+		if (start.getI() > 0) {
+			Entry up = arr[start.getI() - 1][start.getJ()];
+			if (up != null && !up.equals(start.getParent())) {
+				up.setParent(start);
+				stack.push(up);
+			}
 		}
 		// get max from front
 		if (start.getJ() < column) {
-			Entry front = arr[start.getI() - 1][start.getJ()];
-			if (front != null) {
-				mFront = getMaxFrom(front);
+			Entry front = arr[start.getI()][start.getJ() + 1];
+			if (front != null && !front.equals(start.getParent())) {
+				front.setParent(start);
+				stack.push(front);
 			}
 		}
 		// get max from down
-		Entry down = arr[start.getI() + 1][start.getJ()];
-		if (down != null) {
-			mDown = getMaxFrom(down);
+		if (start.getI() < row) {
+			Entry down = arr[start.getI() + 1][start.getJ()];
+			if (down != null && !down.equals(start.getParent())) {
+				down.setParent(start);
+				stack.push(down);
+			}
 		}
-		mUp = mUp > mFront ? mUp : mFront;
-		mUp = mUp > mDown ? mUp : mDown;
-
-		return mUp;
+		if (stack.isEmpty()) {
+			System.out.println("Start : " + start);
+			return start.getVal();
+		}
+		while (!stack.isEmpty()) {
+			Entry entry = stack.pop();
+			curMax = getMaxFrom(entry);
+			max += start.getVal() + curMax;
+			System.out.println(" Max : " + max + " curMax : " + curMax);
+		}
+		System.out.println("Start : " + start + " Max : " + max);
+		return max;
 	}
 }
 
