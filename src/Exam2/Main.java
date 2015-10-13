@@ -17,16 +17,17 @@ public class Main {
 	
 
 	public static void main(String[] args) {
-		long time = System.currentTimeMillis();
-		int totalCities = Integer.parseInt(args[0]);
 
+		int totalCities = Integer.parseInt(args[0]);
 		int i = 0;
+		
 		for (i = 2; i < totalCities*2; i+=2) {
 
 			if (adjMap.get(Integer.parseInt(args[i])) == null) {
 				LinkedHashSet<City> cityList = new LinkedHashSet<City>();
 				cityList.add(new City(Integer.parseInt(args[i+1])));
 				adjMap.put(Integer.parseInt(args[i]), cityList);
+				
 				if (adjMap.get(Integer.parseInt(args[i+1])) == null) {
 					LinkedHashSet<City> cityLst = new LinkedHashSet<City>();
 					cityLst.add(new City(Integer.parseInt(args[i])));
@@ -56,8 +57,6 @@ public class Main {
 				resetMap(Integer.parseInt(args[i+1]));
 			}
 		}
-
-		System.out.println("Execution time : "+(System.currentTimeMillis()-time));
 	}
 
 	private static void makeCityFestive(int i) {
@@ -75,6 +74,7 @@ public class Main {
 		}
 	}
 
+	// To reset the already visited node status
 	private static void resetMap(int i) {
 		City city = new City(i);
 		Stack<City> s = new Stack<City>();

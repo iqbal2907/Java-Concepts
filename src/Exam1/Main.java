@@ -1,8 +1,5 @@
 package Exam1;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -21,14 +18,6 @@ public class Main {
 			}
 			k = (i - 2) % columns;
 			arr[j][k] = Integer.parseInt(args[i]);
-		}
-
-		System.out.println("Input in matrix : ");
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				System.out.print(arr[i][j] + " ");
-			}
-			System.out.println();
 		}
 
 		NodeInfo[][] mat = new NodeInfo[rows][columns];
@@ -59,107 +48,89 @@ class Game {
 			for (int i = 0; i < iDimen; i++) {
 				if (matrix[i][j].value == -1)
 					continue;
-				int valueUp = matrix[i][j].value;
-				int valueDown = matrix[i][j].value;
-				List<Address> pathUp = new ArrayList<Address>();
-				pathUp.add(new Address(i, j));
-				List<Address> pathDown = new ArrayList<Address>();
-				pathDown.add(new Address(i, j));
-				int telePathvalueUp = 0;
-				int telePathvalueDown = 0;
-				List<Address> telePathpathUp = new ArrayList<Address>();
-				pathUp.add(new Address(i, j));
-				List<Address> telePathpathDown = new ArrayList<Address>();
-				pathDown.add(new Address(i, j));
-				Up(i, j, valueUp, pathUp, telePathvalueUp, telePathpathUp);
-				Down(i, j, valueDown, pathDown, telePathvalueDown,
-						telePathpathDown);
-				if (valueUp > valueDown) {
-					matrix[i][j].totalValue = valueUp;
-					matrix[i][j].path = pathUp;
-				} else if (valueUp == valueDown) {
-					if (valueUp == matrix[i][j].totalValue && j != jDimen - 1) {
+
+				TotalValue totalValueUp = new TotalValue(matrix[i][j].value, 0);
+				TotalValue totalValueDown = new TotalValue(matrix[i][j].value,
+						0);
+
+				// from one point either we can go up or down or right.
+				Up(i, j, totalValueUp);
+				Down(i, j, totalValueDown);
+
+				// update the matrix with maximum totalValue and totaltelepath value
+				if (totalValueUp.totalval > totalValueDown.totalval) {
+					matrix[i][j].totalValue = totalValueUp.totalval;
+				} else if (totalValueUp.totalval == totalValueDown.totalval) {
+					if (totalValueUp.totalval == matrix[i][j].totalValue
+							&& j != jDimen - 1) {
 						// we will reach here if there is no way to reach
 						// end
 						// traversing this node
 						matrix[i][j].totalValue = -1;
 					} else {
-						matrix[i][j].totalValue = valueDown;
-						matrix[i][j].path = pathDown;
+						matrix[i][j].totalValue = totalValueDown.totalval;
 					}
 				} else {
-					matrix[i][j].totalValue = valueDown;
-					matrix[i][j].path = pathDown;
+					matrix[i][j].totalValue = totalValueDown.totalval;
 				}
-				if (telePathvalueUp > telePathvalueDown) {
-					matrix[i][j].totalTelepathValue = telePathvalueUp;
-					matrix[i][j].telepathPath = telePathpathUp;
-				} else if (telePathvalueUp == telePathvalueDown) {
-					if (telePathvalueUp == matrix[i][j].totalTelepathValue
+
+				if (totalValueUp.televal > totalValueDown.televal) {
+					matrix[i][j].totalTelepathValue = totalValueUp.televal;
+				} else if (totalValueUp.televal == totalValueDown.televal) {
+					if (totalValueUp.televal == matrix[i][j].totalTelepathValue
 							&& j != jDimen - 1) {
 						// we will reach here if there is no way to reach
 						// end
 						// traversing this node
 						matrix[i][j].totalTelepathValue = -1;
 					} else {
-						matrix[i][j].totalTelepathValue = telePathvalueDown;
-						matrix[i][j].telepathPath = telePathpathDown;
+						matrix[i][j].totalTelepathValue = totalValueDown.televal;
 					}
 				} else {
-					matrix[i][j].totalTelepathValue = telePathvalueDown;
-					matrix[i][j].telepathPath = telePathpathDown;
+					matrix[i][j].totalTelepathValue = totalValueDown.televal;
 				}
 			}
 		}
 	}
 
-	private void Up(int i, int j, int value, List<Address> path, int televalue,
-			List<Address> telepath) {
+	private void Up(int i, int j, TotalValue totalvalue) {
 		int ii = i;
 		int localValue = 0;
-		List<Address> localPath = new ArrayList<Address>();
 		boolean traverse = true;
 		boolean tele = false;
 
 		while (traverse) {
 			localValue += matrix[ii][j].value;
-			localPath.add(new Address(ii, j));
-			// Check are we on last column
 
+			// Check are we on last column
 			if (j != jDimen - 1) {
+				
 				if (matrix[ii][j + 1].totalValue != -1) {
 					if (tele) {
 						int max = maximum(localValue
-								+ matrix[ii][j + 1].totalValue, localValue
-								+ matrix[ii][j + 1].totalTelepathValue);
-						if (televalue < max) {
-							televalue = max;
-							telepath = new ArrayList<Address>(localPath);
-							telepath.add(new Address(ii, j + 1));
+								+ matrix[ii][j + 1].totalValue,
+								matrix[ii][j + 1].totalTelepathValue);
+						if (totalvalue.televal < max) {
+							totalvalue.televal = max;
 						}
 					} else {
-						if (value < localValue + matrix[ii][j + 1].totalValue) {
-							value = localValue + matrix[ii][j + 1].totalValue;
-							path = new ArrayList<Address>(localPath);
-							path.add(new Address(ii, j + 1));
+						if (totalvalue.totalval < localValue
+								+ matrix[ii][j + 1].totalValue) {
+							totalvalue.totalval = localValue
+									+ matrix[ii][j + 1].totalValue;
 						}
-						if (televalue < matrix[ii][j + 1].totalTelepathValue) {
-							televalue = matrix[ii][j + 1].totalTelepathValue;
-							telepath = new ArrayList<Address>(localPath);
-							telepath.add(new Address(ii, j + 1));
+						if (totalvalue.televal < matrix[ii][j + 1].totalTelepathValue) {
+							totalvalue.televal = matrix[ii][j + 1].totalTelepathValue;
 						}
 					}
 				}
 			} else {
 				if (tele) {
-					if (televalue < localValue) {
-						televalue = localValue;
-						telepath = new ArrayList<Address>(localPath);
+					if (totalvalue.televal < localValue) {
+						totalvalue.televal = localValue;
 					}
 				} else {
-					value = localValue;
-					path = new ArrayList<Address>(localPath);
-					telepath = new ArrayList<Address>(localPath);
+					totalvalue.totalval = localValue;
 				}
 			}
 			// Check if we are on top, if yes
@@ -183,18 +154,16 @@ class Game {
 		return v2;
 	}
 
-	private void Down(int i, int j, int value, List<Address> path,
-			int televalue, List<Address> telepath) {
+	private void Down(int i, int j, TotalValue totalvalue) {
 
 		int ii = i;
 		int localValue = 0;
-		List<Address> localPath = new ArrayList<Address>();
 		boolean traverse = true;
 		boolean tele = false;
 
 		while (traverse) {
 			localValue += matrix[ii][j].value;
-			localPath.add(new Address(ii, j));
+
 			// Check are we on last column
 			if (j != jDimen - 1) {
 				if (matrix[ii][j + 1].totalValue != -1) {
@@ -202,34 +171,27 @@ class Game {
 						int max = maximum(localValue
 								+ matrix[ii][j + 1].totalValue, localValue
 								+ matrix[ii][j + 1].totalTelepathValue);
-						if (televalue < max) {
-							televalue = max;
-							telepath = new ArrayList<Address>(localPath);
-							telepath.add(new Address(ii, j + 1));
+						if (totalvalue.televal < max) {
+							totalvalue.televal = max;
 						}
 					} else {
-						if (value < localValue + matrix[ii][j + 1].totalValue) {
-							value = localValue + matrix[ii][j + 1].totalValue;
-							path = new ArrayList<Address>(localPath);
-							path.add(new Address(ii, j + 1));
+						if (totalvalue.totalval < localValue
+								+ matrix[ii][j + 1].totalValue) {
+							totalvalue.totalval = localValue
+									+ matrix[ii][j + 1].totalValue;
 						}
-						if (televalue < matrix[ii][j + 1].totalTelepathValue) {
-							televalue = matrix[ii][j + 1].totalTelepathValue;
-							telepath = new ArrayList<Address>(localPath);
-							telepath.add(new Address(ii, j + 1));
+						if (totalvalue.televal < matrix[ii][j + 1].totalTelepathValue) {
+							totalvalue.televal = matrix[ii][j + 1].totalTelepathValue;
 						}
 					}
 				}
 			} else {
 				if (tele) {
-					if (televalue < localValue) {
-						televalue = localValue;
-						telepath = new ArrayList<Address>(localPath);
+					if (totalvalue.televal < localValue) {
+						totalvalue.televal = localValue;
 					}
 				} else {
-					value = localValue;
-					path = new ArrayList<Address>(localPath);
-					telepath = new ArrayList<Address>(localPath);
+					totalvalue.totalval = localValue;
 				}
 			}
 			// Check if we are on top, if yes
@@ -249,34 +211,22 @@ class Game {
 
 	public void result() {
 
-		int value = matrix[0][0].totalValue;
-		int locationi = 0;
-		for (int i = 1; i < iDimen; i++) {
+		int value = -1;
+
+		for (int i = 0; i < iDimen; i++) {
+			
+			// Check for main value
 			if (value < matrix[i][0].totalValue) {
 				value = matrix[i][0].totalValue;
-				locationi = i;
+			}
+
+			// Check for telePath value
+			if (value < matrix[i][0].totalTelepathValue) {
+				value = matrix[i][0].totalTelepathValue;
 			}
 		}
 
-		System.out.println("Maximum value: " + matrix[locationi][0].totalValue);
-		// Now print path
-		int count = 0;
-		Address nextNode = new Address(locationi, 0);
-		while (count <= 1) {
-			List<Address> path = matrix[nextNode.i][nextNode.j].path;
-			int totalnumber = path.size();
-
-			for (int ii = 0; ii < totalnumber - 1; ii++) {
-				System.out.println("( " + path.get(ii).i + ", "
-						+ path.get(ii).j + " )");
-			}
-			
-			nextNode = path.get(totalnumber - 1);
-			if (nextNode.j == jDimen - 1)
-				count++;
-		}
-
-		System.out.println("( " + nextNode.i + ", " + nextNode.j + " )");
+		System.out.println(value);
 
 	}
 }
@@ -292,19 +242,26 @@ class Address {
 	}
 }
 
+class TotalValue {
+	public int totalval;
+	public int televal;
+
+	public TotalValue(int t1, int t2) {
+		totalval = t1;
+		televal = t2;
+	}
+
+}
+
 class NodeInfo {
 
-	public int value;
-	public int totalValue;
-	public int totalTelepathValue;
-	public List<Address> telepathPath;
-	public List<Address> path;
+	public int value;        // Value of the node ( 99999 > value > -1)
+	public int totalValue;       // total value from this node to end if we are using not telepath
+	public int totalTelepathValue;  // total value from this node to end if we are using telepath
 
 	public NodeInfo(int v, int t) {
 		value = v;
 		totalValue = t;
 		totalTelepathValue = t;
-		path = new ArrayList<Address>();
-		telepathPath = new ArrayList<Address>();
 	}
 }
