@@ -1,19 +1,23 @@
 package Exam2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 public class Main {
 
 	public static Map<Integer, LinkedHashSet<City>> adjMap = new HashMap<Integer, LinkedHashSet<City>>();
 	public static List<City> listOfFestiveCities = new ArrayList<City>();
+	public static Set<City> parents = new LinkedHashSet<City>();
 	
 
 	public static void main(String[] args) {
@@ -52,11 +56,41 @@ public class Main {
 			if (Integer.parseInt(args[i]) == 1) {
 				makeCityFestive(Integer.parseInt(args[i+1]));
 			} else if (Integer.parseInt(args[i]) == 2) {
-				int minDistance = getNearestFestiveCityDistance(Integer.parseInt(args[i+1]));
-				System.out.println(minDistance);
+				City city = getNearestFestiveCityDistance(Integer.parseInt(args[i+1]));
+				System.out.println("TotalDistance : "+city.getTotalDistance());
+				System.out.print("Path : ");
+				if (city.getParentId() != 0) {
+					System.out.println(printPath(city));
+				}
+				System.out.println();
 				resetMap(Integer.parseInt(args[i+1]));
+				parents.clear();
 			}
 		}
+	}
+
+	private static ArrayList<Integer> printPath(City city) {
+		Iterator<City> itr = parents.iterator();
+		Map<Integer, City> pathMap = new HashMap<Integer, City>();
+		ArrayList<Integer> path = new ArrayList<Integer>();
+		while (itr.hasNext()) {
+			City c = (City) itr.next();
+			pathMap.put(c.getId(), c);
+		}
+		
+		Boolean flag = true;
+		int id = city.getId();
+		while (flag) {
+			City c = pathMap.get(id);
+			path.add(id);
+			if (c.getParentId() == 0) {
+				flag = false;
+			} else {
+				id = c.getParentId();
+			}
+		}
+		Collections.reverse(path);
+		return path;
 	}
 
 	private static void makeCityFestive(int i) {
@@ -85,6 +119,7 @@ public class Main {
 			City child = getVisitedChildNode(n);
 			if (child != null) {
 				city.setVisited(true);
+				city.setParentId(0);
 				s.push(child);
 			} else {
 				s.pop();
@@ -109,27 +144,29 @@ public class Main {
 		return null;
 	}
 
-	private static int getNearestFestiveCityDistance(int i) {
+	private static City getNearestFestiveCityDistance(int i) {
 		Queue<City> queue = new LinkedList<City>();
 		City city = new City(i);
 		
 		if(checkFestiveCity(city)){
-			return city.getTotalDistance();
+			return city;
 		}
 		city.setVisited(true);
 		queue.add(city);
 		while (!queue.isEmpty()) {
 			City c = queue.remove();
+			parents.add(c);
 			if (c.isFestive()) {
-				return c.getTotalDistance();
+				return c;
 			}
 			City child = null;
 			while ((child = getUnvisitedChildNode(c)) != null) {
+				child.setParentId(c.getId());
 				child.setTotalDistance(c.getTotalDistance()+1);
 				queue.add(child);
 			}
 		}
-		return -1;
+		return null;
 	}
 
 	private static boolean checkFestiveCity(City city) {
@@ -158,6 +195,7 @@ public class Main {
 
 class City {
 	final private int id;
+	private int parentId;
 	private boolean isFestive;
 	private boolean isVisited;
 	private int totalDistance;
@@ -193,6 +231,14 @@ class City {
 		this.totalDistance = totalDistance;
 	}
 	
+	public int getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -218,7 +264,7 @@ class City {
 
 	@Override
 	public String toString() {
-		return "("+this.id+","+this.isFestive+","+this.isVisited+","+this.totalDistance+")";
+		return "("+this.id+","+this.isFestive+","+this.parentId+","+this.isVisited+","+this.totalDistance+")";
 	}
 
 }
