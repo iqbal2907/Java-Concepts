@@ -1,4 +1,4 @@
-package Exam1;
+package com.jp.year2015.Exam1;
 
 public class Main {
 
@@ -107,17 +107,18 @@ class Game {
 				
 				if (matrix[ii][j + 1].totalValue != -1) {
 					if (tele) {
-						int max = maximum(localValue
-								+ matrix[ii][j + 1].totalValue,
-								matrix[ii][j + 1].totalTelepathValue);
-						if (totalvalue.televal < max) {
-							totalvalue.televal = max;
+						if (localValue + matrix[ii][j + 1].totalValue >= matrix[ii][j + 1].totalTelepathValue) {
+							if (totalvalue.televal < localValue + matrix[ii][j + 1].totalValue) {
+								totalvalue.televal = localValue + matrix[ii][j + 1].totalValue;
+							}
+						} else {
+							if (totalvalue.televal < matrix[ii][j + 1].totalTelepathValue) {
+								totalvalue.televal = matrix[ii][j + 1].totalTelepathValue;
+							}
 						}
 					} else {
-						if (totalvalue.totalval < localValue
-								+ matrix[ii][j + 1].totalValue) {
-							totalvalue.totalval = localValue
-									+ matrix[ii][j + 1].totalValue;
+						if (totalvalue.totalval < localValue + matrix[ii][j + 1].totalValue) {
+							totalvalue.totalval = localValue + matrix[ii][j + 1].totalValue;
 						}
 						if (totalvalue.televal < matrix[ii][j + 1].totalTelepathValue) {
 							totalvalue.televal = matrix[ii][j + 1].totalTelepathValue;
