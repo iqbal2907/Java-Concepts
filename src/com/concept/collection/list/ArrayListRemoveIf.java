@@ -25,7 +25,7 @@ public class ArrayListRemoveIf{
       System.out.println(myList);
       
       System.out.print("Removing all 10's from myList");
-      System.out.println(myList.removeIf(filter));
+      System.out.println(myList.remove(filter));
       
       System.out.println("Elements in myList are");
       System.out.println(myList);

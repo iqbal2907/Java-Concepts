@@ -52,7 +52,7 @@ public class TestLocalInner {
 
 class localInner2 {
 	void display() {
-		int value = 50;// local variable must be final till jdk 1.7 only
+		final int value = 50;// local variable must be final till jdk 1.7 only
 		class Local {
 			void msg() {
 				System.out.println(value);
