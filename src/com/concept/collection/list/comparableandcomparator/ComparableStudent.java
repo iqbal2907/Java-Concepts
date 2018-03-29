@@ -4,11 +4,11 @@ public class ComparableStudent implements Comparable<ComparableStudent> {
 
 	@Override
 	public int compareTo(ComparableStudent o) {
-		//		to sort on the basis of marks 
-		return this.getMarks()-o.getMarks();
-		//		to sort on the basis of name
-		//return (this.name).compareTo(o.name);
-}
+		// to sort on the basis of marks
+		return this.getMarks() - o.getMarks();
+		// to sort on the basis of name
+		// return (this.name).compareTo(o.name);
+	}
 
 	private String name;
 	private String subject;
@@ -53,5 +53,4 @@ public class ComparableStudent implements Comparable<ComparableStudent> {
 				+ ", regId=" + regId + ", marks=" + marks + "]";
 	}
 
-	
 }

@@ -9,12 +9,12 @@ public class SortMapOnKeyString {
 	public static void main(String[] args) {
 		//When key is String
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("K", "Kolkatta");
-		map.put("M", "Mumbai");
-		map.put("D", "Delhi");
-		map.put("C", "Chennai");
-		map.put("H", "Hyderabad");
-		map.put("B", "Bengaluru");
+		map.put("Ka", "Kolkatta");
+		map.put("Mc", "Mumbai");
+		map.put("Dc", "Delhi");
+		map.put("Cc", "Chennai");
+		map.put("Ha", "Hyderabad");
+		map.put("ABf", "Bengaluru");
 		map.put("P", "Pune");
 		map.put("k", "kolkatta");
 		map.put("m", "mumbai");

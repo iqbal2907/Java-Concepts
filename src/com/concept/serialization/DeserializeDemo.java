@@ -8,7 +8,7 @@ public class DeserializeDemo {
 	public static void main(String[] args) {
 		Employee e = null;
 		try {
-			FileInputStream fileIn = new FileInputStream("/home/iqbal/workspace/MyImportantStuffs/io_resource/employee.txt");
+			FileInputStream fileIn = new FileInputStream("I:/employee.txt");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			e = (Employee) in.readObject();
 			in.close();

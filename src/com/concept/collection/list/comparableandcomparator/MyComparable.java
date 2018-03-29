@@ -17,7 +17,9 @@ public class MyComparable {
 			st.setMarks(new Random().nextInt(100));
 			ComparableStudentList.add(st);
 		}
-
+		Collections.sort(ComparableStudentList);
+		System.out.println(ComparableStudentList);
+		
 		for (int i = 0; i < 10; i++) {
 			ComparableStudent st = new ComparableStudent();
 			st.setRegId(i+11);

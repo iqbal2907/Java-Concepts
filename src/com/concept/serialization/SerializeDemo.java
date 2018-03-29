@@ -12,7 +12,7 @@ public class SerializeDemo {
 		e.SSN = 11122333;
 		e.number = 101;
 		try {
-			FileOutputStream fileOut = new FileOutputStream("/home/iqbal/workspace/MyImportantStuffs/io_resource/employee.txt");
+			FileOutputStream fileOut = new FileOutputStream("I:/employee.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(e);
 			out.close();
