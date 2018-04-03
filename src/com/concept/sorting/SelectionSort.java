@@ -11,7 +11,7 @@ public class SelectionSort {
 		}
 	}
 
-	private static void selectionSort(int[] arr) {
+	private static void selectionSort2(int[] arr) {
 
 		for (int i = 0; i < arr.length - 1; i++) {
 			int min = arr[i];
@@ -25,6 +25,20 @@ public class SelectionSort {
 				}
 			}
 			arr[i] = min;
+		}
+	}
+	
+	public static void selectionSort(int arr[]){
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = i+1; j < arr.length; j++) {
+				if (arr[j]<arr[i]) {
+					System.out.println("swaping :"+arr[i]+"&"+arr[j]);
+					int temp = arr[j];
+					arr[j] = arr[i];
+					arr[i] = temp;
+				}
+			}
+			System.out.println("after"+i+" iteration arr["+i+"] is :"+arr[i]);
 		}
 	}
 
