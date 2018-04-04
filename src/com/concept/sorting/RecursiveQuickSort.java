@@ -78,4 +78,3 @@ public class RecursiveQuickSort
      printArray(arr);
  }
 }
-/*This code is contributed by Rajat Mishra */
