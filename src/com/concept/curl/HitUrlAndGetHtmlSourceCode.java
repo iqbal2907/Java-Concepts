@@ -9,7 +9,7 @@ import java.net.URL;
 public class HitUrlAndGetHtmlSourceCode {
 
 	public static void main(String[] args) throws UnsupportedEncodingException, IOException {
-		URL url = new URL("http://stackoverflow.com");
+		URL url = new URL("https://www.opentext.com/");
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(
 				url.openStream(), "UTF-8"))) {
 			for (String line; (line = reader.readLine()) != null;) {
