@@ -11,9 +11,7 @@ public class OddEvenPrintMain {
 			while (count < MAX) {
 				if (!odd) {
 					try {
-//						System.out.println("Odd waiting : " + count);
 						wait();
-//						System.out.println("Notified odd :" + count);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -28,20 +26,11 @@ public class OddEvenPrintMain {
  
 	public void printEven() {
  
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
 		synchronized (this) {
 			while (count < MAX) {
-//				System.out.println("Checking even loop");
- 
 				if (odd) {
 					try {
-//						System.out.println("Even waiting: " + count);
 						wait();
-//						System.out.println("Notified even:" + count);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -80,12 +69,12 @@ public class OddEvenPrintMain {
 		t1.start();
 		t2.start();
  
-/*		try {
+		try {
 			t1.join();
 			t2.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-*/ 
+ 
 	}
 }
