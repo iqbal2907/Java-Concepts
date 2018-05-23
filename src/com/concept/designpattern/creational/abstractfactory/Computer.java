@@ -1,5 +1,9 @@
 package com.concept.designpattern.creational.abstractfactory;
 
+/**
+ * https://www.journaldev.com/1827/java-design-patterns-example-tutorial
+ * @author ashrafii
+ */
 public abstract class Computer {
     
     public abstract String getRAM();

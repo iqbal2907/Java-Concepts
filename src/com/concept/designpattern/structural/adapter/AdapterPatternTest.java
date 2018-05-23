@@ -1,5 +1,9 @@
 package com.concept.designpattern.structural.adapter;
 
+/**
+ * https://www.journaldev.com/1827/java-design-patterns-example-tutorial
+ * @author ashrafii
+ */
 public class AdapterPatternTest {
 
 	public static void main(String[] args) {
