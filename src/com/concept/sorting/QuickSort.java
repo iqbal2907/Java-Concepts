@@ -28,15 +28,18 @@ public class QuickSort {
 
 	private static void quickSort(int p, int r) {
 		if (p < r) {
-			int q = partition(p, r);
-			for (int i = 0; i < arr.length; i++) {
+//			int q = partition(p, r);
+/*			for (int i = 0; i < arr.length; i++) {
 				System.out.print(arr[i] + " ");
 			}
 			System.out.println("\n");
+*/
+			int q = partition(arr, p, r);
 			quickSort(p, q - 1);
 			quickSort(q + 1, r);
 		}
 	}
+	
 	private static int partition(int p, int r) {
 		int i = p;
 		int j = r;
@@ -58,5 +61,35 @@ public class QuickSort {
 			}
 		}
 		return i-1;
+	}
+	
+	private static int partition(int arr[] ,int p ,int r){
+		int pivot = arr[r];
+		printArray(arr);
+		System.out.println("Pivot : "+pivot +", p :"+p+", r :"+r);
+		int i = p-1;
+		for (int j = p; j < r; j++) {
+			if (arr[j] < pivot) {
+				i++;
+				swap(arr, i, j);
+			}
+		}
+		i++;
+		swap(arr, i, r);
+		return i;
+	}
+
+	private static void swap(int arr[], int i, int j) {
+
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+	
+	private static void printArray(int arr[]){
+		for (int i = 0; i < arr.length; i++) {
+			System.out.print(arr[i]+" ");
+		}
+		System.out.println();
 	}
 }
