@@ -1,0 +1,1 @@
+we can read only one character at a time.
