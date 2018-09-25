@@ -11,7 +11,7 @@ public class BinarySearch {
 		for (int i = 0; i < sortedArray.length; i++) {
 			System.out.print(sortedArray[i] + " ");
 		}
-		int index = new BinarySearch().binarySearch(sortedArray, 15);
+		int index = new BinarySearch().recursiveBinarySearch(sortedArray, 0, sortedArray.length-1, 15);
 		System.out.println("\nindex : " + index);
 	}
 

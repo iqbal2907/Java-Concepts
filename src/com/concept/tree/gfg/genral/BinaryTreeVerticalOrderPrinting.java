@@ -1,0 +1,100 @@
+package com.concept.tree.gfg.genral;
+
+//Java program to print binary tree in reverse order 
+
+//A binary tree node 
+class Node {
+	int data;
+	Node left, right;
+
+	Node(int item) {
+		data = item;
+		left = right = null;
+	}
+}
+
+class Values {
+	int max, min;
+}
+
+public class BinaryTreeVerticalOrderPrinting {
+	Node root;
+	Values val = new Values();
+
+	// The main function that prints a given binary tree in
+	// vertical order
+	void verticalOrder(Node node) {
+		// Find min and max distances with resepect to root
+		findMinMax(node, val, 0);
+		System.out.println("min:"+val.min+", max:"+val.max);
+		
+		// Iterate through all possible vertical lines starting
+		// from the leftmost line and print nodes line by line
+		for (int line_no = val.min; line_no <= val.max; line_no++) {
+			printVerticalLine(node, line_no, 0);
+			System.out.println("");
+		}
+	}
+	
+	// A utility function to find min and max distances with respect
+	// to root.
+	void findMinMax(Node node, Values val, int hd) {
+		System.out.println("minmax--- hd : "+hd+"     min:"+val.min+", max:"+val.max);
+		System.out.println();
+		// Base case
+		if (node == null)
+			return;
+
+		// Update min and max
+		if (hd < val.min)
+			val.min = hd;
+		else if (hd > val.max)
+			val.max = hd;
+
+		// Recur for left and right subtrees
+		findMinMax(node.left, val, hd - 1);
+		findMinMax(node.right, val, hd + 1);
+	}
+
+
+	// A utility function to print all nodes on a given line_no.
+	// hd is horizontal distance of current node with respect to root.
+	void printVerticalLine(Node node, int line_no, int hd) {
+		// Base case
+		if (node == null)
+			return;
+
+		// If this node is on the given line number
+		if (hd == line_no)
+			System.out.print(node.data + " ");
+
+		// Recur for left and right subtrees
+		printVerticalLine(node.left, line_no, hd - 1);
+		printVerticalLine(node.right, line_no, hd + 1);
+	}
+
+	// Driver program to test the above functions
+	public static void main(String args[]) {
+		BinaryTreeVerticalOrderPrinting tree = new BinaryTreeVerticalOrderPrinting();
+
+		/* Let us construct the tree shown in above diagram */
+		tree.root = new Node(1);
+		tree.root.left = new Node(2);
+		tree.root.right = new Node(3);
+		tree.root.left.left = new Node(4);
+		tree.root.left.right = new Node(5);
+/*		tree.root.left.right.left = new Node(15);
+		tree.root.left.right.left.left = new Node(16);
+		tree.root.left.right.left.left.left = new Node(17);
+		tree.root.left.right.left.left.left.left = new Node(18);
+*/		tree.root.right.left = new Node(6);
+		tree.root.right.right = new Node(7);
+		tree.root.right.left.right = new Node(8);
+		tree.root.right.right.right = new Node(9);
+
+		System.out.println("vertical order traversal is :");
+		tree.verticalOrder(tree.root);
+	}
+}
+
+//This code has been contributed by Mayank Jaiswal

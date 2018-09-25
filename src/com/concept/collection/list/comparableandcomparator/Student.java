@@ -47,6 +47,7 @@ public class Student {
 		}
 	};
 
+	//this is not possible also Collections.sort() method is not overloaded with any Comparable argument
 	public static Comparable<Student> subjectComparable = new Comparable<Student>() {
 
 		@Override
