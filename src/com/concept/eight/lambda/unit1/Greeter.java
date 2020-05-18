@@ -8,24 +8,19 @@ public class Greeter {
 	
 	
 	public static void main(String[] args) {
+
 		Greeter greeter = new Greeter();
 		
+		Greeting lambdaGreeting = () -> System.out.print("Hello world!\n");
 		
-		Greeting lambdaGreeting = () -> System.out.print("Hello world!");
-		
-		Greeting innerClassGreeting = new Greeting() {
+		Greeting anonymousClassGreeting = new Greeting() {
 			public void perform() {
-				System.out.print("Hello world!");
+				System.out.print("anonymousClassGreeting : Hello world!\n");
 			}
 		};
 		
-		greeter.greet(() -> System.out.print("Hello world!"));
-		greeter.greet(innerClassGreeting);
-		
-		
-		
-		
-		
+		greeter.greet(() -> System.out.print("lambda : Hello world!\n"));
+		greeter.greet(anonymousClassGreeting);
 	}
 
 }

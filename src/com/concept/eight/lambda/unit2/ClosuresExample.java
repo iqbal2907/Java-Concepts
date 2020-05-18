@@ -9,7 +9,6 @@ public class ClosuresExample {
 
 	}
 	
-	
 	public static void doProcess(int i, Process p) {
 		p.process(i);
 	}

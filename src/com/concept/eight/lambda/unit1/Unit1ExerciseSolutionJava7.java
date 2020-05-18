@@ -46,28 +46,22 @@ public class Unit1ExerciseSolutionJava7 {
 				return p.getFirstName().startsWith("C");
 			}
 		});
-		
 	}
 
 	private static void printConditionally(List<Person> people, Condition condition) {
 		for (Person p : people) {
 			if (condition.test(p)) {
 				System.out.println(p);
-			}
-			
-		}
-		
+			}	
+		}	
 	}
 
 	private static void printAll(List<Person> people) {
 		for (Person p : people) {
 			System.out.println(p);
-		}
-		
+		}		
 	}
-
 }
-
 
 
 interface Condition {

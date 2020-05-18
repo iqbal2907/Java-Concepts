@@ -30,8 +30,6 @@ public class CollectionIterationExample {
 		System.out.println("Using lambda for each loop");
 		people.forEach(System.out::println);
 		
-		
-
 	}
 
 }

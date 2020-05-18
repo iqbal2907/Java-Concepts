@@ -23,5 +23,4 @@ public class Unit1Exercise {
 		// Step 3: Create a method that prints all people that have last name beginning with C 
 
 	}
-
 }

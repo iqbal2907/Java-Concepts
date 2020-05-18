@@ -14,7 +14,6 @@ public class ThisReferenceExample {
 		});
 	}
 	
-	
 	public static void main(String[] args) {
 		ThisReferenceExample thisReferenceExample = new ThisReferenceExample();
 		
@@ -23,13 +22,8 @@ public class ThisReferenceExample {
 			// System.out.println(this); This will not work
 		});
 		*/
-		
-		
+				
 		thisReferenceExample.execute();
-		
-		
-		
-		
 	}
 	
 	public String toString() {

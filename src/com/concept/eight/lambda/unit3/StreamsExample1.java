@@ -16,11 +16,9 @@ public class StreamsExample1 {
 				new Person("Matthew", "Arnold", 39)
 				);
 		
-		
 		people.stream()
 		.filter(p -> p.getLastName().startsWith("C"))
 		.forEach(p -> System.out.println(p.getFirstName()));
-		
 		
 		
 		long count = people.parallelStream()
@@ -28,8 +26,6 @@ public class StreamsExample1 {
 		.count();
 		
 		System.out.println(count);
-		
 
 	}
-
 }

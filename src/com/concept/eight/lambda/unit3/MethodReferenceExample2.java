@@ -21,8 +21,7 @@ public class MethodReferenceExample2 {
 		
 		System.out.println("Printing all persons");
 		performConditionally(people, p -> true, System.out::println); // p -> method(p)
-		
-				
+	
 	}
 
 	private static void performConditionally(List<Person> people, Predicate<Person> predicate, Consumer<Person> consumer) {
