@@ -12,6 +12,9 @@ public class GenericStackTest {
 		stack.push(4);
 		stack.push(5);
 		stack.print(stack);
+		stack.pop();
+		System.out.println("\nStack after 1st pop() call :");
+		stack.print(stack);
 		
 		System.out.println("\nStack of Strings :");
 
@@ -21,16 +24,14 @@ public class GenericStackTest {
 		stringStack.push("def");
 		stringStack.push("efg");
 		stringStack.print(stringStack);
+		stringStack.pop();
+		System.out.println("\nStack after 1st pop() call :");
+		stringStack.print(stringStack);
 		
 		System.out.println("\nStack of Characters :");
 
-		GenericStack<Character> charStack = new GenericStack<Character>('a');
-		charStack.push('b');
-		charStack.push('c');
-		charStack.push('d');
-		charStack.push('e');
-		charStack.print(charStack);
-		
 
+		
+		
 	}
 }

@@ -39,7 +39,7 @@ public class GenericQueue<T> {
 		} else {
 			data = queue.data;
 			queue = queue.next.next;
-			System.out.println("next data: "+queue.data);
+//			System.out.println("next data: "+queue.data);
 			return data;
 		}
 	}
